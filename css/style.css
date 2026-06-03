@@ -291,11 +291,51 @@ body {
     .task-form { grid-template-columns: 1fr; }
 }
 
-/* 🛠️ ส่วนที่เพิ่มเข้าไปด้านล่างสุด: ล็อกขนาดคอลัมน์วันที่ในตาราง ไม่ให้โดนบีบจนหักขึ้นบรรทัดใหม่ */
+/* 🛠️ ล็อกขนาดคอลัมน์วันที่ในตาราง ไม่ให้โดนบีบจนหักขึ้นบรรทัดใหม่ */
 .custom-table th:nth-child(4), 
 .custom-table td:nth-child(4) {
     white-space: nowrap !important;
     width: 105px !important;
     min-width: 105px !important;
     text-align: center;
+}
+
+/* 📢 ---------------------------------------------
+   ส่วนที่เพิ่มเข้าไปใหม่ล่าสุด: ตกแต่งกล่องข้อความประกาศ
+   ------------------------------------------------ */
+.announcement-container {
+    background-color: #f0f7ff;      /* สีฟ้าพาสเทลนุ่มๆ สะอาดตา */
+    border-left: 5px solid #4a90e2;  /* เส้นขอบสีฟ้ายึดความเด่น */
+    padding: 15px 20px;
+    border-radius: 8px;
+    max-width: 600px;
+    margin: 0 auto 25px auto;        /* จัดกึ่งกลาง และเว้นระยะห่างก่อนถึงปุ่ม */
+    text-align: left;
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.05);
+}
+
+.announcement-container p {
+    color: var(--dark-blue);
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.6;
+    white-space: pre-line;           /* ช่วยให้ถ้าเคาะสเปซหรือเว้นบรรทัด ข้อความจะขึ้นบรรทัดใหม่ตามจริง */
+}
+
+.announcement-container p i {
+    color: var(--primary-color);
+    margin-right: 8px;
+}
+
+#save-announcement-btn {
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+#save-announcement-btn:hover {
+    background-color: #357abd !important; /* ให้ปุ่มบันทึกเข้มขึ้นเวลาเอาเมาส์ไปชี้ */
 }
