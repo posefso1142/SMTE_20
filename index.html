@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMTE20 Classroom</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <nav class="hotbar">
+        <div class="hotbar-container">
+            <button class="admin-avatar-btn" id="loginBtn" title="สำหรับแอดมิน">
+                <i class="fa-solid fa-user-gear"></i>
+            </button>
+            
+            <div class="shortcut-menu">
+                <a href="#task-section" class="shortcut-item">
+                    <i class="fa-solid fa-clipboard-list"></i> <span>ตารางงาน</span>
+                </a>
+                <a href="https://posefso1142.github.io/" target="_blank" class="shortcut-item">
+                    <i class="fa-solid fa-wallet"></i> <span>เก็บเงินห้อง</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="banner-container">
+        <div class="banner-box">
+            <img src="assets/images/banner.jpg" alt="SMTE20 Banner" onerror="this.style.display='none';">
+            <div class="banner-placeholder-text">   )</div>
+        </div>
+    </header>
+
+    <main class="main-wrapper">
+        
+        <section id="admin-panel" class="admin-panel hidden">
+            <h3><i class="fa-solid fa-unlock-keyhole"></i> ระบบจัดการสำหรับแอดมิน (Admin Panel)</h3>
+            <form id="task-form" class="task-form">
+                <input type="text" id="task-name" placeholder="ชื่องาน" required>
+                <input type="text" id="task-desc" placeholder="รายละเอียดงาน" required>
+                <input type="date" id="task-date" required>
+                <input type="text" id="task-note" placeholder="หมายเหตุ (ถ้ามี)">
+                <button type="submit" class="btn-add"><i class="fa-solid fa-plus"></i> เพิ่มงานใหม่</button>
+            </form>
+            <button id="logoutBtn" class="btn-logout">ออกจากระบบแอดมิน</button>
+        </section>
+
+        <section id="task-section" class="content-card">
+            <div class="card-header">
+                <i class="fa-solid fa-chalkboard"></i>
+                <h2>ตารางงาน</h2>
+            </div>
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>ลำดับ</th>
+                            <th>ชื่องาน</th>
+                            <th>รายละเอียดงาน</th>
+                            <th>วันที่ต้องส่ง</th>
+                            <th>หมายเหตุ</th>
+                            <th class="admin-action-col hidden">จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="task-list">
+                        </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="money-section" class="content-card text-center">
+            <div class="card-header justify-center">
+                <i class="fa-solid fa-bounce fa-money-bill-wave" style="color: #2ec4b6;"></i>
+                <h2>เก็บเงินประจำสัปดาห์</h2>
+            </div>
+            <p class="section-desc">ตรวจสอบสถานะการออมเงินและค่าใช้จ่ายส่วนกลางของห้องเรียนได้ที่นี่</p>
+            <a href="https://posefso1142.github.io/" target="_blank" class="btn-primary">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> ไปยังระบบเก็บเงินห้อง
+            </a>
+        </section>
+
+    </main>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>แอดมินเข้าสู่ระบบ</h3>
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="ระบุผู้ใช้งาน">
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="ระบุรหัสผ่าน">
+            </div>
+            <p id="login-error" class="error-text hidden">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!</p>
+            <button id="submitLogin" class="btn-login-submit">เข้าสู่ระบบ</button>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

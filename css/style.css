@@ -1,0 +1,292 @@
+/* รีเซ็ตค่าพื้นฐาน */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Prompt', sans-serif;
+}
+
+:root {
+    --primary-color: #4a90e2;    /* ฟ้าสว่างโมเดิร์น */
+    --secondary-color: #e6f0fa;  /* ฟ้าอ่อนพาสเทล */
+    --dark-blue: #1e3d59;       /* น้ำเงินเข้มสำหรับตัวอักษรเด่น */
+    --text-color: #4a5568;      /* เทาเข้มอ่านง่าย */
+    --bg-color: #f4f8fc;        /* พื้นหลังฟ้าจางๆ สะอาดตา */
+    --white: #ffffff;
+    --radius: 16px;             /* ความกลมตามที่ชอบ */
+    --transition: all 0.3s ease;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding-bottom: 50px;
+}
+
+/* 1. Hotbar Style */
+.hotbar {
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px); /* เอฟเฟกต์กระจกฝ้าโมเดิร์น */
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(74, 144, 226, 0.08);
+    border-bottom: 1px solid rgba(74, 144, 226, 0.1);
+}
+
+.hotbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+}
+
+/* ปุ่มวงกลมแอดมิน */
+.admin-avatar-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: var(--secondary-color);
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: var(--transition);
+}
+
+.admin-avatar-btn:hover {
+    background-color: var(--primary-color);
+    color: var(--white);
+    transform: scale(1.05);
+}
+
+.shortcut-menu {
+    display: flex;
+    gap: 15px;
+}
+
+.shortcut-item {
+    text-decoration: none;
+    color: var(--dark-blue);
+    background-color: var(--secondary-color);
+    padding: 8px 16px;
+    border-radius: 30px; /* ทรงโค้งมนแบบแคปซูล */
+    font-size: 0.95rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transition);
+}
+
+.shortcut-item:hover {
+    background-color: var(--primary-color);
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+/* 2. Banner Area */
+.banner-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.banner-box {
+    width: 100%;
+    height: 350px; /* ควบคุมความสูงบนเดสก์ท็อป */
+    background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); /* สีฟ้าไล่ระดับรอใส่รูป */
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.05);
+}
+
+.banner-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* รูปไม่เบี้ยวแน่นอน */
+}
+
+.banner-placeholder-text {
+    display: none; /* 👈 เพิ่มบรรทัดนี้เพื่อซ่อนข้อความตัวหนังสือขนาด */
+    position: absolute;
+    color: var(--dark-blue);
+    font-weight: 500;
+    text-align: center;
+    padding: 10px;
+}
+
+/* Main Layout Container */
+.main-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Cards (กล่องเนื้อหาต่างๆ) */
+.content-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(161, 196, 253, 0.12);
+    border: 1px solid rgba(161, 196, 253, 0.2);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    color: var(--dark-blue);
+}
+
+.card-header i {
+    font-size: 1.6rem;
+    color: var(--primary-color);
+}
+
+.card-header h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+/* 4. Table Style (ตารางงาน) */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto; /* เปิด Scroll แนวนอนอัตโนมัติหากจอมือถือเล็กไป */
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    min-width: 600px; /* ป้องกันตารางบีบตัวจนอ่านไม่รู้เรื่องในมือถือ */
+}
+
+.custom-table th, .custom-table td {
+    padding: 14px 18px;
+    border-bottom: 1px solid #eef2f7;
+}
+
+.custom-table th {
+    background-color: var(--secondary-color);
+    color: var(--dark-blue);
+    font-weight: 600;
+}
+
+.custom-table th:first-child { border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
+.custom-table th:last-child { border-top-right-radius: 8px; border-bottom-right-radius: 8px; }
+
+.custom-table tbody tr:hover {
+    background-color: rgba(230, 240, 250, 0.4);
+}
+
+/* 5. ปุ่มและรายละเอียดหน้าเก็บเงินห้อง */
+.text-center { text-align: center; }
+.justify-center { justify-content: center; }
+.section-desc { margin-bottom: 20px; color: #718096; }
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--primary-color);
+    color: var(--white);
+    text-decoration: none;
+    padding: 12px 28px;
+    border-radius: var(--radius);
+    font-weight: 500;
+    transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+}
+
+/* Admin Panel & UI Controls */
+.admin-panel {
+    background: #fff3cd; /* สีเหลืองนวลเตือนว่าเป็นหน้าจัดการ */
+    border: 1px solid #ffeeba;
+    border-radius: var(--radius);
+    padding: 20px;
+}
+
+.admin-panel h3 { color: #856404; margin-bottom: 15px; }
+
+.task-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.task-form input, .input-group input {
+    padding: 10px 15px;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    outline: none;
+    font-size: 0.95rem;
+}
+
+.task-form input:focus, .input-group input:focus {
+    border-color: var(--primary-color);
+}
+
+.btn-add {
+    background-color: #2ec4b6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.btn-add:hover { background-color: #249a8f; }
+.btn-logout { background: #e63946; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+.btn-delete { background: #e63946; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; }
+
+/* Modal Popup Window */
+.modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.4); display: flex; justify-content: center; align-items: center;
+    opacity: 0; pointer-events: none; transition: var(--transition); z-index: 1000;
+}
+.modal.show { opacity: 1; pointer-events: auto; }
+.modal-content {
+    background: white; padding: 30px; border-radius: var(--radius); width: 90%; max-width: 400px;
+    position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+.close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; }
+.input-group { display: flex; flex-direction: column; gap: 5px; margin-top: 15px; }
+.btn-login-submit { width: 100%; margin-top: 20px; padding: 12px; background: var(--primary-color); color: white; border: none; border-radius: 8px; font-weight: 500; cursor: pointer; }
+.error-text { color: #e63946; font-size: 0.85rem; margin-top: 8px; }
+.hidden { display: none !important; }
+
+/* 📱 Responsive Design (รองรับมือถือและอุปกรณ์ 100%) */
+@media (max-width: 768px) {
+    .hotbar-container {
+        padding: 10px;
+    }
+    .shortcut-item span {
+        display: none; /* บนมือถือ จะซ่อนตัวหนังสือไว้ เหลือแค่ไอคอนเก๋ๆ เพื่อไม่ให้ล้นจอ */
+    }
+    .shortcut-menu { gap: 8px; }
+    .banner-box { height: 180px; } /* บนมือถือย่อความสูงของแบนเนอร์ลงมาให้สมส่วน */
+    .content-card { padding: 15px; }
+    .task-form { grid-template-columns: 1fr; }
+}
