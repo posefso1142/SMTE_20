@@ -290,3 +290,12 @@ body {
     .content-card { padding: 15px; }
     .task-form { grid-template-columns: 1fr; }
 }
+
+/* 🛠️ ส่วนที่เพิ่มเข้าไปด้านล่างสุด: ล็อกขนาดคอลัมน์วันที่ในตาราง ไม่ให้โดนบีบจนหักขึ้นบรรทัดใหม่ */
+.custom-table th:nth-child(4), 
+.custom-table td:nth-child(4) {
+    white-space: nowrap !important;
+    width: 105px !important;
+    min-width: 105px !important;
+    text-align: center;
+}
