@@ -232,7 +232,7 @@ window.deleteTask = function(idToDelete) {
 // รันฟังก์ชันตรวจสอบเมื่อเปิดหน้าเว็บครั้งแรก
 updateUI();
 // ==========================================
-// ระบบจัดการประกาศเก็บเงินประจำสัปดาห์ (เพิ่มเติม)
+// 📢 ระบบจัดการประกาศเก็บเงินประจำสัปดาห์ (เวอร์ชันอัปเดต)
 // ==========================================
 const announcementText = document.getElementById('announcement-text');
 const announcementInput = document.getElementById('announcement-input');
@@ -241,41 +241,67 @@ const saveAnnouncementBtn = document.getElementById('save-announcement-btn');
 // ฟังก์ชันดึงประกาศมาแสดงผลตอนเปิดหน้าเว็บ
 function loadAnnouncement() {
     if (!announcementText) return;
-    // ดึงข้อมูลที่เคยเซฟไว้ในเครื่อง (ถ้าไม่มีให้ใช้ข้อความเริ่มต้น)
-    const savedText = localStorage.getItem('roomAnnouncement') || "สัปดาห์นี้ยังไม่มีการประกาศยอดเก็บเงินห้องประจำสัปดาห์";
-    announcementText.innerHTML = `<i class="fa-solid fa-bullhorn"></i> ${savedText}`;
     
-    // ถ้ามีช่องอินพุตของแอดมิน ให้เอาข้อความเก่าไปใส่รอนำไว้ด้วย
-    if (announcementInput) {
-        announcementInput.value = savedText;
+    // 1. ดึงข้อความที่เคยบันทึกไว้ในเครื่องออกมา
+    const savedText = localStorage.getItem('roomAnnouncement');
+    
+    if (savedText) {
+        // ถ้าเคยมีประกาศที่แอดมินบันทึกไว้แล้ว ให้แสดงผลข้อความนั้นปกติ
+        announcementText.innerHTML = `<i class="fa-solid fa-bullhorn"></i> ${savedText}`;
+        if (announcementInput) {
+            announcementInput.value = savedText;
+        }
+    } else {
+        // 2. ถ้ายังไม่เคยมีประกาศอะไรเลย (ค่าว่างครั้งแรก)
+        announcementText.innerHTML = `<i class="fa-solid fa-bullhorn"></i> สัปดาห์นี้ยังไม่มีการประกาศยอดเก็บเงินห้องประจำสัปดาห์`;
+        if (announcementInput) {
+            // เปลี่ยนเป็นข้อความเริ่มต้นตามที่ต้องการเรียบร้อยครับ
+            announcementInput.value = "เพิ่มประกาศตรงนี้"; 
+        }
     }
 }
 
-// ฟังก์ชันสำหรับกดบันทึกประกาศ
+// 🛠️ ระบบช่วยเคลียร์คำอัตโนมัติเมื่อแอดมินคลิกช่องพิมพ์
+if (announcementInput) {
+    announcementInput.addEventListener('focus', () => {
+        if (announcementInput.value === "เพิ่มประกาศตรงนี้") {
+            announcementInput.value = "";
+        }
+    });
+
+    // ถ้าแอดมินคลิกออกแล้วช่องพิมพ์ว่างเปล่า จะดึงคำว่า "เพิ่มประกาศตรงนี้" กลับมาให้
+    announcementInput.addEventListener('blur', () => {
+        if (announcementInput.value.trim() === "") {
+            announcementInput.value = "เพิ่มประกาศตรงนี้";
+        }
+    });
+}
+
+// ฟังก์ชันสำหรับกดปุ่มบันทึกประกาศ
 if (saveAnnouncementBtn) {
     saveAnnouncementBtn.addEventListener('click', () => {
-        // 🔑 บรรทัดเช็กสิทธิ์: ถ้าแอดมินยังไม่ได้ Login หรือตัวแปร isAdmin เป็น false จะกดไม่ได้
-        // หมายเหตุ: หากคุณต้องการให้ทดสอบกดบันทึกได้เลยโดยไม่ต้อง Login ให้ลบบรรทัดล่างนี้ออกได้ครับ
-        if (typeof isAdmin !== 'undefined' && !isAdmin) {
+        // 🔑 บล็อกเช็กสิทธิ์แอดมิน: ต้องล็อกอินให้สิทธิ์ isAdmin เป็น true ก่อน
+        if (!isAdmin) {
             alert("❌ เฉพาะแอดมินที่เข้าสู่ระบบแล้วเท่านั้นจึงจะแก้ไขประกาศได้ครับ");
             return;
         }
 
         const newText = announcementInput.value.trim();
         
-        if (newText === "") {
-            alert("กรุณากรอกข้อความประกาศก่อนกดบันทึกครับ");
+        // ถ้าไม่ได้พิมพ์อะไรเลย หรือปล่อยให้เป็นคำตั้งต้นแล้วกดบันทึก ระบบจะแจ้งเตือน
+        if (newText === "" || newText === "เพิ่มประกาศตรงนี้") {
+            alert("กรุณากรอกข้อความประกาศที่ต้องการแจ้งนักเรียนก่อนกดบันทึกครับ");
             return;
         }
         
-        // เซฟลงเครื่องเบราว์เซอร์
+        // บันทึกลงหน่วยความจำของเครื่องเบราว์เซอร์
         localStorage.setItem('roomAnnouncement', newText);
         alert("💾 บันทึกประกาศประจำสัปดาห์เรียบร้อยแล้ว!");
         
-        // สั่งอัปเดตกล่องแสดงผลด้านล่างทันทีโดยไม่ต้องรีเฟรชหน้าเว็บ
+        // อัปเดตกล่องแสดงผลสีฟ้าด้านล่างทันทีโดยไม่ต้องรีเฟรชหน้าจอ
         loadAnnouncement();
     });
 }
 
-// สั่งให้ทำงานทันทีที่โหลดหน้าเว็บเสร็จ
-document.addEventListener('DOMContentLoaded', loadAnnouncement);
+// สั่งให้โหลดประกาศขึ้นมาแสดงผลทันทีที่เปิดหน้าเว็บครั้งแรก
+loadAnnouncement();
