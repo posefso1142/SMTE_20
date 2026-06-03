@@ -22,7 +22,7 @@ const taskList = document.getElementById('task-list');
 // เช็กสถานะการ Login จากเซสชัน
 let isAdmin = sessionStorage.getItem('isAdmin') === 'true';
 
-// 🔄 ตัวแปรเก็บข้อมูลงาน (เปลี่ยนจากโหลด LocalStorage เป็น Array ว่างเพื่อรอโหลดจาก Google Sheets)
+// ตัวแปรเก็บข้อมูลงาน
 let tasks = [];
 
 // ฟังก์ชันเปิด/ปิด Modal Login
@@ -103,7 +103,7 @@ function fetchTasksFromSheets() {
 }
 
 // ==========================================
-// ฟังก์ชัน 2: วาดตารางงานบนหน้าเว็บ (คงดีไซน์เดิม)
+// ฟังก์ชัน 2: วาดตารางงานบนหน้าเว็บ (ปรับฟอร์แมตเป็นตัวเลขป้องกัน iOS ตกบรรทัด)
 // ==========================================
 function renderTasks() {
     taskList.innerHTML = '';
@@ -116,12 +116,26 @@ function renderTasks() {
     tasks.forEach((task, index) => {
         const tr = document.createElement('tr');
         
-        // ฟอร์แมตวันที่ให้เป็นแบบไทยอ่านง่ายเหมือนเดิม (รองรับทั้งชื่อตัวแปร .date และ .due_date)
         const taskDate = task.date || task.due_date;
-        const dateObj = new Date(taskDate);
-        const thaiDate = taskDate ? dateObj.toLocaleDateString('th-TH', {day: 'numeric', month: 'short', year: '2-digit'}) : '-';
+        let thaiDate = '-';
 
-        // รองรับโครงสร้างตัวแปรจาก Google Sheets (name หรือ task_name)
+        if (taskDate) {
+            // 🛠️ แก้บั๊กสำหรับ iOS/Safari: เปลี่ยนเครื่องหมายขีด (-) ให้เป็นสแลช (/) 
+            const safeDateStr = taskDate.replace(/-/g, "/");
+            const dateObj = new Date(safeDateStr);
+            
+            if (!isNaN(dateObj.getTime())) {
+                // 🛠️ สั่งปรับรูปแบบการแสดงผลเป็นตัวเลขทั้งหมด (เช่น 04/06/69) เพื่อลดการใช้พื้นที่หน้าจอ
+                thaiDate = dateObj.toLocaleDateString('th-TH', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: '2-digit'
+                });
+            } else {
+                thaiDate = taskDate; 
+            }
+        }
+
         const name = task.name || task.task_name;
         const desc = task.desc || task.task_detail;
         const note = task.note || task.remark;
@@ -130,7 +144,7 @@ function renderTasks() {
             <td>${index + 1}</td>
             <td style="font-weight:500; color:var(--dark-blue);">${name}</td>
             <td>${desc}</td>
-            <td><span style="background-color:#ffe3e3; color:#e63946; padding:4px 8px; border-radius:20px; font-size:0.85rem;">${thaiDate}</span></td>
+            <td><span style="background-color:#ffe3e3; color:#e63946; padding:4px 10px; border-radius:20px; font-size:0.85rem; white-space: nowrap; display: inline-block; font-weight: 500;">${thaiDate}</span></td>
             <td style="font-style: italic; color:#718096;">${note || '-'}</td>
             ${isAdmin ? `<td class="admin-action-col"><button class="btn-delete" onclick="deleteTask(${task.id})"><i class="fa-solid fa-trash"></i></button></td>` : ''}
         `;
@@ -172,7 +186,7 @@ taskForm.addEventListener('submit', (e) => {
     .then(() => {
         alert('➕ เพิ่มงานใหม่ลง Google Sheets สำเร็จ!');
         taskForm.reset();
-        fetchTasksFromSheets(); // โดดร่มไปดึงข้อมูลล่าสุดมาแสดงผลใหม่
+        fetchTasksFromSheets(); // ดึงข้อมูลล่าสุดมาแสดงผลใหม่
     })
     .catch(err => {
         console.error("Error adding task:", err);
