@@ -231,3 +231,51 @@ window.deleteTask = function(idToDelete) {
 
 // รันฟังก์ชันตรวจสอบเมื่อเปิดหน้าเว็บครั้งแรก
 updateUI();
+// ==========================================
+// ระบบจัดการประกาศเก็บเงินประจำสัปดาห์ (เพิ่มเติม)
+// ==========================================
+const announcementText = document.getElementById('announcement-text');
+const announcementInput = document.getElementById('announcement-input');
+const saveAnnouncementBtn = document.getElementById('save-announcement-btn');
+
+// ฟังก์ชันดึงประกาศมาแสดงผลตอนเปิดหน้าเว็บ
+function loadAnnouncement() {
+    if (!announcementText) return;
+    // ดึงข้อมูลที่เคยเซฟไว้ในเครื่อง (ถ้าไม่มีให้ใช้ข้อความเริ่มต้น)
+    const savedText = localStorage.getItem('roomAnnouncement') || "สัปดาห์นี้ยังไม่มีการประกาศยอดเก็บเงินห้องประจำสัปดาห์";
+    announcementText.innerHTML = `<i class="fa-solid fa-bullhorn"></i> ${savedText}`;
+    
+    // ถ้ามีช่องอินพุตของแอดมิน ให้เอาข้อความเก่าไปใส่รอนำไว้ด้วย
+    if (announcementInput) {
+        announcementInput.value = savedText;
+    }
+}
+
+// ฟังก์ชันสำหรับกดบันทึกประกาศ
+if (saveAnnouncementBtn) {
+    saveAnnouncementBtn.addEventListener('click', () => {
+        // 🔑 บรรทัดเช็กสิทธิ์: ถ้าแอดมินยังไม่ได้ Login หรือตัวแปร isAdmin เป็น false จะกดไม่ได้
+        // หมายเหตุ: หากคุณต้องการให้ทดสอบกดบันทึกได้เลยโดยไม่ต้อง Login ให้ลบบรรทัดล่างนี้ออกได้ครับ
+        if (typeof isAdmin !== 'undefined' && !isAdmin) {
+            alert("❌ เฉพาะแอดมินที่เข้าสู่ระบบแล้วเท่านั้นจึงจะแก้ไขประกาศได้ครับ");
+            return;
+        }
+
+        const newText = announcementInput.value.trim();
+        
+        if (newText === "") {
+            alert("กรุณากรอกข้อความประกาศก่อนกดบันทึกครับ");
+            return;
+        }
+        
+        // เซฟลงเครื่องเบราว์เซอร์
+        localStorage.setItem('roomAnnouncement', newText);
+        alert("💾 บันทึกประกาศประจำสัปดาห์เรียบร้อยแล้ว!");
+        
+        // สั่งอัปเดตกล่องแสดงผลด้านล่างทันทีโดยไม่ต้องรีเฟรชหน้าเว็บ
+        loadAnnouncement();
+    });
+}
+
+// สั่งให้ทำงานทันทีที่โหลดหน้าเว็บเสร็จ
+document.addEventListener('DOMContentLoaded', loadAnnouncement);
