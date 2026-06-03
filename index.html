@@ -47,7 +47,16 @@
                 <input type="text" id="task-note" placeholder="หมายเหตุ (ถ้ามี)">
                 <button type="submit" class="btn-add"><i class="fa-solid fa-plus"></i> เพิ่มงานใหม่</button>
             </form>
-            <button id="logoutBtn" class="btn-logout">ออกจากระบบแอดมิน</button>
+
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #cbd5e0;">
+                <h4 style="color: #856404; margin-bottom: 8px; font-size: 0.95rem;"><i class="fa-solid fa-edit"></i> แก้ไขประกาศเก็บเงินประจำสัปดาห์</h4>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="announcement-input" placeholder="พิมพ์ประกาศ เช่น สัปดาห์นี้เก็บคนละ 20 บาท เริ่มเก็บวันจันทร์..." style="flex: 1; padding: 10px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 0.9rem;">
+                    <button id="save-announcement-btn" class="btn-add" style="padding: 0 15px; background-color: #4a90e2;"><i class="fa-solid fa-save"></i> บันทึกประกาศ</button>
+                </div>
+            </div>
+
+            <button id="logoutBtn" class="btn-logout" style="margin-top: 15px;">ออกจากระบบแอดมิน</button>
         </section>
 
         <section id="task-section" class="content-card">
@@ -84,6 +93,11 @@
                 <h2>เก็บเงินประจำสัปดาห์</h2>
             </div>
             <p class="section-desc">ตรวจสอบสถานะการออมเงินและค่าใช้จ่ายส่วนกลางของห้องเรียนได้ที่นี่</p>
+            
+            <div id="announcement-box" class="announcement-container">
+                <p id="announcement-text"><i class="fa-solid fa-bullhorn"></i> กำลังโหลดประกาศสัปดาห์นี้...</p>
+            </div>
+
             <a href="https://posefso1142.github.io/" target="_blank" class="btn-primary">
                 <i class="fa-solid fa-arrow-up-right-from-square"></i> ไปยังระบบเก็บเงินห้อง
             </a>
