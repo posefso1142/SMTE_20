@@ -1,3 +1,5 @@
+// ลิงก์เฉพาะของระบบประกาศที่คุณสร้างใหม่
+const ANNOUNCEMENT_URL = "https://script.google.com/macros/s/AKfycbzgugIZ7WNhmTJsOduZ7BPYMZbRm8H3VMrOZExGazRjqyvEk3I3ZBriITAIBpJ-AkxY/exec";
 // ข้อมูล Admin ที่ฟิกซ์ไว้ตามเงื่อนไข
 const ADMIN_USER = "ADMIN_SMTE20";
 const ADMIN_PASS = "SMTE_202020";
@@ -79,6 +81,7 @@ function updateUI() {
         document.querySelectorAll('.admin-action-col').forEach(el => el.classList.add('hidden'));
     }
     fetchTasksFromSheets(); // ดึงข้อมูลใหม่จาก Google Sheets ทุกครั้งที่อัปเดต UI
+    loadAnnouncement();     // 📢 พ่วงให้ดึงข้อมูลประกาศออนไลน์ใหม่ทุกครั้งที่มีการเปลี่ยนสถานะแอดมิน
 }
 
 // ==========================================
@@ -231,37 +234,51 @@ window.deleteTask = function(idToDelete) {
 
 // รันฟังก์ชันตรวจสอบเมื่อเปิดหน้าเว็บครั้งแรก
 updateUI();
+
 // ==========================================
-// 📢 ระบบจัดการประกาศเก็บเงินประจำสัปดาห์ (เวอร์ชันอัปเดต)
+// 📢 ระบบจัดการประกาศเก็บเงินประจำสัปดาห์ (เวอร์ชันเชื่อมต่อออนไลน์สมบูรณ์)
 // ==========================================
 const announcementText = document.getElementById('announcement-text');
 const announcementInput = document.getElementById('announcement-input');
 const saveAnnouncementBtn = document.getElementById('save-announcement-btn');
 
-// ฟังก์ชันดึงประกาศมาแสดงผลตอนเปิดหน้าเว็บ
+// ฟังก์ชันดึงประกาศมาแสดงผลตอนเปิดหน้าเว็บ (เปลี่ยนจาก localStorage ไปดึงจาก Google Sheets ออนไลน์)
 function loadAnnouncement() {
     if (!announcementText) return;
     
-    // 1. ดึงข้อความที่เคยบันทึกไว้ในเครื่องออกมา
-    const savedText = localStorage.getItem('roomAnnouncement');
-    
-    if (savedText) {
-        // ถ้าเคยมีประกาศที่แอดมินบันทึกไว้แล้ว ให้แสดงผลข้อความนั้นปกติ
-        announcementText.innerHTML = `<i class="fa-solid fa-bullhorn"></i> ${savedText}`;
-        if (announcementInput) {
-            announcementInput.value = savedText;
-        }
-    } else {
-        // 2. ถ้ายังไม่เคยมีประกาศอะไรเลย (ค่าว่างครั้งแรก)
+    // แสดงสถานะหมุนติ้ว ๆ ระหว่างรอข้อมูลจากเซิร์ฟเวอร์
+    announcementText.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> กำลังโหลดประกาศล่าสุด...`;
+
+    fetch(ANNOUNCEMENT_URL)
+        .then(res => res.json())
+        .then(data => {
+            if (data.announcement) {
+                // นำข้อมูลประกาศจริงจากแผ่นชีทมาแสดง
+                announcementText.innerHTML = `<i class="fa-solid fa-bullhorn"></i> ${data.announcement}`;
+                if (announcementInput && (announcementInput.value === "" || announcementInput.value === "เพิ่มประกาศตรงนี้")) {
+                    announcementInput.value = data.announcement;
+                }
+            } else {
+                setEmptyAnnouncementUI();
+            }
+        })
+        .catch(err => {
+            console.error("Error fetching announcement:", err);
+            setEmptyAnnouncementUI();
+        });
+}
+
+// ฟังก์ชันจัดการ UI กรณีไม่มีข้อมูลออนไลน์หรือเกิดข้อผิดพลาด
+function setEmptyAnnouncementUI() {
+    if (announcementText) {
         announcementText.innerHTML = `<i class="fa-solid fa-bullhorn"></i> สัปดาห์นี้ยังไม่มีการประกาศยอดเก็บเงินห้องประจำสัปดาห์`;
-        if (announcementInput) {
-            // เปลี่ยนเป็นข้อความเริ่มต้นตามที่ต้องการเรียบร้อยครับ
-            announcementInput.value = "เพิ่มประกาศตรงนี้"; 
-        }
+    }
+    if (announcementInput && announcementInput.value === "") {
+        announcementInput.value = "เพิ่มประกาศตรงนี้";
     }
 }
 
-// 🛠️ ระบบช่วยเคลียร์คำอัตโนมัติเมื่อแอดมินคลิกช่องพิมพ์
+// 🛠️ ระบบช่วยเคลียร์คำอัตโนมัติเมื่อแอดมินคลิกช่องพิมพ์ (คงของเดิมไว้)
 if (announcementInput) {
     announcementInput.addEventListener('focus', () => {
         if (announcementInput.value === "เพิ่มประกาศตรงนี้") {
@@ -269,7 +286,7 @@ if (announcementInput) {
         }
     });
 
-    // ถ้าแอดมินคลิกออกแล้วช่องพิมพ์ว่างเปล่า จะดึงคำว่า "เพิ่มประกาศตรงนี้" กลับมาให้
+    // ถ้าแอดมินคลิกออกแล้วช่องพิมพ์ว่างเปล่า จะดึงคำว่า "เพิ่มประกาศตรงนี้" กลับมาให้ (คงของเดิมไว้)
     announcementInput.addEventListener('blur', () => {
         if (announcementInput.value.trim() === "") {
             announcementInput.value = "เพิ่มประกาศตรงนี้";
@@ -277,10 +294,10 @@ if (announcementInput) {
     });
 }
 
-// ฟังก์ชันสำหรับกดปุ่มบันทึกประกาศ
+// ฟังก์ชันสำหรับกดปุ่มบันทึกประกาศ (เปลี่ยนจากเขียนลงหน่วยความจำเครื่อง -> เขียนขึ้น Google Sheets)
 if (saveAnnouncementBtn) {
     saveAnnouncementBtn.addEventListener('click', () => {
-        // 🔑 บล็อกเช็กสิทธิ์แอดมิน: ต้องล็อกอินให้สิทธิ์ isAdmin เป็น true ก่อน
+        // 🔑 บล็อกเช็กสิทธิ์แอดมิน (คงของเดิมไว้)
         if (!isAdmin) {
             alert("❌ เฉพาะแอดมินที่เข้าสู่ระบบแล้วเท่านั้นจึงจะแก้ไขประกาศได้ครับ");
             return;
@@ -288,18 +305,45 @@ if (saveAnnouncementBtn) {
 
         const newText = announcementInput.value.trim();
         
-        // ถ้าไม่ได้พิมพ์อะไรเลย หรือปล่อยให้เป็นคำตั้งต้นแล้วกดบันทึก ระบบจะแจ้งเตือน
+        // ถ้าไม่ได้พิมพ์อะไรเลย หรือปล่อยให้เป็นคำตั้งต้นแล้วกดบันทึก ระบบจะแจ้งเตือน (คงของเดิมไว้)
         if (newText === "" || newText === "เพิ่มประกาศตรงนี้") {
             alert("กรุณากรอกข้อความประกาศที่ต้องการแจ้งนักเรียนก่อนกดบันทึกครับ");
             return;
         }
         
-        // บันทึกลงหน่วยความจำของเครื่องเบราว์เซอร์
-        localStorage.setItem('roomAnnouncement', newText);
-        alert("💾 บันทึกประกาศประจำสัปดาห์เรียบร้อยแล้ว!");
+        // ล็อกปุ่มและขึ้นสถานะกำลังบันทึกออนไลน์
+        saveAnnouncementBtn.disabled = true;
+        saveAnnouncementBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...`;
         
-        // อัปเดตกล่องแสดงผลสีฟ้าด้านล่างทันทีโดยไม่ต้องรีเฟรชหน้าจอ
-        loadAnnouncement();
+        const announceData = {
+            action: "updateAnnouncement",
+            text: newText
+        };
+
+        // ส่งข้อมูลขึ้นฐานข้อมูลกลางของระบบประกาศ
+        fetch(ANNOUNCEMENT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(announceData)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success") {
+                alert("💾 บันทึกประกาศประจำสัปดาห์ทับลงใน Google Sheets สำเร็จ! (ทุกเครื่องเปลี่ยนตามทันที)");
+                loadAnnouncement(); // ดึงคำประกาศล่าสุดจากออนไลน์มาโชว์ทันที
+            } else {
+                alert("เกิดข้อผิดพลาดจากระบบ: " + data.message);
+            }
+        })
+        .catch(err => {
+            console.error("Error updating announcement:", err);
+            alert("ไม่สามารถอัปเดตประกาศลงฐานข้อมูลกูเกิลชีทได้");
+        })
+        .finally(() => {
+            // ปลดล็อกปุ่มให้พร้อมพิมพ์ใหม่
+            saveAnnouncementBtn.disabled = false;
+            saveAnnouncementBtn.innerHTML = `<i class="fa-solid fa-save"></i> บันทึกประกาศ`;
+        });
     });
 }
 
