@@ -9,11 +9,11 @@
 :root {
     --primary-color: #4a90e2;    /* ฟ้าสว่างโมเดิร์น */
     --secondary-color: #e6f0fa;  /* ฟ้าอ่อนพาสเทล */
-    --dark-blue: #1e3d59;       /* น้ำเงินเข้มสำหรับตัวอักษรเด่น */
+    --dark-blue: #1e3d59;        /* น้ำเงินเข้มสำหรับตัวอักษรเด่น */
     --text-color: #4a5568;      /* เทาเข้มอ่านง่าย */
     --bg-color: #f4f8fc;        /* พื้นหลังฟ้าจางๆ สะอาดตา */
     --white: #ffffff;
-    --radius: 16px;             /* ความกลมตามที่ชอบ */
+    --radius: 16px;              /* ความกลมตามที่ชอบ */
     --transition: all 0.3s ease;
 }
 
@@ -117,7 +117,7 @@ body {
 }
 
 .banner-placeholder-text {
-    display: none; /* 👈 เพิ่มบรรทัดนี้เพื่อซ่อนข้อความตัวหนังสือขนาด */
+    display: none; /* ซ่อนข้อความตัวหนังสือขนาด */
     position: absolute;
     color: var(--dark-blue);
     font-weight: 500;
@@ -217,7 +217,7 @@ body {
     box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
 }
 
-/* Admin Panel & UI Controls */
+/* Admin Panel & UI Controls (กล่องแอดมินเหลือเฉพาะตารางงาน) */
 .admin-panel {
     background: #fff3cd; /* สีเหลืองนวลเตือนว่าเป็นหน้าจัดการ */
     border: 1px solid #ffeeba;
@@ -257,7 +257,21 @@ body {
 }
 
 .btn-add:hover { background-color: #249a8f; }
-.btn-logout { background: #e63946; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+
+/* ปรับระยะปุ่มออกจากระบบให้เว้นช่องไฟสวยงามหลังจากตัดโซนประกาศออก */
+.btn-logout { 
+    background: #e63946; 
+    color: white; 
+    border: none; 
+    padding: 8px 16px; 
+    border-radius: 8px; 
+    cursor: pointer;
+    font-weight: 500;
+    margin-top: 5px;
+    transition: var(--transition);
+}
+.btn-logout:hover { background: #c92a35; }
+
 .btn-delete { background: #e63946; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; }
 
 /* Modal Popup Window */
@@ -301,7 +315,7 @@ body {
 }
 
 /* 📢 ---------------------------------------------
-   ส่วนที่เพิ่มเข้าไปใหม่ล่าสุด: ตกแต่งกล่องข้อความประกาศ
+   ส่วนแสดงผล: ตกแต่งกล่องข้อความประกาศ (สำหรับหน้านักเรียน)
    ------------------------------------------------ */
 .announcement-container {
     background-color: #f0f7ff;      /* สีฟ้าพาสเทลนุ่มๆ สะอาดตา */
@@ -325,17 +339,4 @@ body {
 .announcement-container p i {
     color: var(--primary-color);
     margin-right: 8px;
-}
-
-#save-announcement-btn {
-    cursor: pointer;
-    border: none;
-    border-radius: 8px;
-    color: white;
-    font-weight: 500;
-    transition: var(--transition);
-}
-
-#save-announcement-btn:hover {
-    background-color: #357abd !important; /* ให้ปุ่มบันทึกเข้มขึ้นเวลาเอาเมาส์ไปชี้ */
 }
