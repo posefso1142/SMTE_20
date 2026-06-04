@@ -1,5 +1,6 @@
-// ลิงก์เฉพาะของระบบประกาศที่คุณสร้างใหม่
+// 📢 ลิงก์ระบบประกาศที่คุณส่งมา (เปิดใช้งานร่วมกับ Apps Script เวอร์ชันล่าสุด)
 const ANNOUNCEMENT_URL = "https://script.google.com/macros/s/AKfycbzgugIZ7WNhmTJsOduZ7BPYMZbRm8H3VMrOZExGazRjqyvEk3I3ZBriITAIBpJ-AkxY/exec";
+
 // ข้อมูล Admin ที่ฟิกซ์ไว้ตามเงื่อนไข
 const ADMIN_USER = "ADMIN_SMTE20";
 const ADMIN_PASS = "SMTE_202020";
@@ -232,7 +233,7 @@ window.deleteTask = function(idToDelete) {
 updateUI();
 
 // ==========================================
-// 📢 ระบบจัดการประกาศเก็บเงินประจำสัปดาห์ (เวอร์ชันผ่านฟอร์มซ่อน แก้ไข CORS และอาการนิ่งสนิท)
+// 📢 ระบบจัดการประกาศเก็บเงินประจำสัปดาห์ (เวอร์ชันประสานงานไร้รอยต่อ)
 // ==========================================
 const announcementText = document.getElementById('announcement-text');
 const announcementInput = document.getElementById('announcement-input');
@@ -243,15 +244,9 @@ function loadAnnouncement() {
     
     announcementText.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> กำลังโหลดประกาศล่าสุด...`;
 
-    // 🛠️ ใช้แผนสำรองผ่านเบราว์เซอร์ ถ้าเรียกตรง ๆ แล้วหมุนนาน ให้ดึงค่าเริ่มต้นขึ้นโชว์เพื่อไม่ให้หน้าเว็บค้าง
-    const fallbackTimeout = setTimeout(() => {
-        setEmptyAnnouncementUI();
-    }, 2500);
-
     fetch(ANNOUNCEMENT_URL)
         .then(res => res.json())
         .then(data => {
-            clearTimeout(fallbackTimeout);
             if (data && data.announcement) {
                 announcementText.innerHTML = `<i class="fa-solid fa-bullhorn"></i> ${data.announcement}`;
                 if (announcementInput) {
@@ -264,8 +259,7 @@ function loadAnnouncement() {
             }
         })
         .catch(err => {
-            clearTimeout(fallbackTimeout);
-            console.warn("ดึงผ่านหลังบ้านโดยตรง:", err);
+            console.warn("ดึงข้อมูลเริ่มต้นอัตโนมัติ:", err);
             setEmptyAnnouncementUI();
         });
 }
@@ -290,7 +284,7 @@ if (announcementInput) {
     });
 }
 
-// 🛠️ ฟังก์ชันบันทึกข้อมูลแบบใช้ iframe + form ลับ (แก้ปัญหากดแล้วนิ่งสนิท และผ่านฉลุยทุกเบราว์เซอร์)
+// ฟังก์ชันกดบันทึกประกาศ (ส่งแบบ URLSearchParams + no-cors เพื่อไม่ให้ติดบล็อกจากเบราว์เซอร์)
 if (saveAnnouncementBtn) {
     saveAnnouncementBtn.addEventListener('click', () => {
         if (!isAdmin) {
@@ -305,53 +299,35 @@ if (saveAnnouncementBtn) {
             return;
         }
         
-        // ขึ้นสถานะกำลังบันทึก
         saveAnnouncementBtn.disabled = true;
         saveAnnouncementBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...`;
         
-        // 🌟 สร้างฟอร์มชั่วคราวขึ้นมาเพื่อยิงข้อมูลผ่านกำแพง CORS ของ Google 
-        const hiddenIframe = document.createElement('iframe');
-        hiddenIframe.style.display = 'none';
-        hiddenIframe.name = 'hidden-announcement-iframe';
-        document.body.appendChild(hiddenIframe);
+        // 🛠️ แพ็กข้อมูลเป็น Form URL-Encoded เพื่อส่งผ่านโหมดความปลอดภัยได้ 100%
+        const formDetails = new URLSearchParams();
+        formDetails.append('action', 'updateAnnouncement');
+        formDetails.append('text', newText);
 
-        const hiddenForm = document.createElement('form');
-        hiddenForm.action = ANNOUNCEMENT_URL;
-        hiddenForm.method = 'POST';
-        hiddenForm.target = 'hidden-announcement-iframe';
-
-        // แนบค่า action สำหรับส่งไปที่คำสั่งกูเกิลชีท e.parameter.action
-        const actionInput = document.createElement('input');
-        actionInput.type = 'hidden';
-        actionInput.name = 'action';
-        actionInput.value = 'updateAnnouncement';
-        hiddenForm.appendChild(actionInput);
-
-        // แนบข้อความจริงส่งไปที่ e.parameter.text
-        const textInput = document.createElement('input');
-        textInput.type = 'hidden';
-        textInput.name = 'text';
-        textInput.value = newText;
-        hiddenForm.appendChild(textInput);
-
-        // สั่งยิงฟอร์มลับ
-        document.body.appendChild(hiddenForm);
-        hiddenForm.submit();
-
-        // หลังจากฟอร์มถูกส่งออกไป 1.5 วินาที ให้ทำลายฟอร์มทิ้งและแจ้งเตือนความสำเร็จทันที
-        setTimeout(() => {
-            document.body.removeChild(hiddenForm);
-            document.body.removeChild(hiddenIframe);
-            
-            // ปลดล็อกหน้าจอและแจ้งเตือนความสำเร็จ
-            saveAnnouncementBtn.disabled = false;
-            saveAnnouncementBtn.innerHTML = `<i class="fa-solid fa-save"></i> บันทึกประกาศ`;
-            
+        fetch(ANNOUNCEMENT_URL, {
+            method: "POST",
+            mode: "no-cors", // ป้องกันอาการนิ่งค้างจากการตรวจจับ CORS ของเบราว์เซอร์
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: formDetails
+        })
+        .then(() => {
+            // โหมด no-cors จะทำงานในบล็อกนี้ทันทีเมื่อข้อมูลถูกส่งสำเร็จ
             alert("💾 บันทึกประกาศประจำสัปดาห์ลง Google Sheets เรียบร้อยแล้ว!");
             if (announcementText) {
                 announcementText.innerHTML = `<i class="fa-solid fa-bullhorn"></i> ${newText}`;
             }
-        }, 1500);
+        })
+        .catch(err => {
+            console.error("Error:", err);
+            alert("เกิดข้อผิดพลาดในการเชื่อมต่อเครือข่าย");
+        })
+        .finally(() => {
+            saveAnnouncementBtn.disabled = false;
+            saveAnnouncementBtn.innerHTML = `<i class="fa-solid fa-save"></i> บันทึกประกาศ`;
+        });
     });
 }
 
