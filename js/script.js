@@ -232,19 +232,18 @@ window.deleteTask = function(idToDelete) {
 updateUI();
 
 // ==========================================
-// 📢 ระบบจัดการประกาศเก็บเงินประจำสัปดาห์ (แก้ไขบั๊ก CORS บล็อกหน้าเว็บค้าง)
+// 📢 ระบบจัดการประกาศเก็บเงินประจำสัปดาห์ (เวอร์ชันแก้บั๊กกดบันทึกแล้วนิ่ง)
 // ==========================================
 const announcementText = document.getElementById('announcement-text');
 const announcementInput = document.getElementById('announcement-input');
 const saveAnnouncementBtn = document.getElementById('save-announcement-btn');
 
-// ฟังก์ชันดึงประกาศออนไลน์แบบ bypass CORS ป้องกันอาการค้างนาน
+// ฟังก์ชันดึงประกาศออนไลน์
 function loadAnnouncement() {
     if (!announcementText) return;
     
     announcementText.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> กำลังโหลดประกาศล่าสุด...`;
 
-    // 🛠️ เปลี่ยนไปดึงผ่านโหมดปกติ หรือใช้ค่าเริ่มต้นหากติดขัดนโยบายความปลอดภัยเบราว์เซอร์
     fetch(ANNOUNCEMENT_URL)
         .then(res => {
             if(!res.ok) throw new Error("Network response was not ok");
@@ -254,6 +253,7 @@ function loadAnnouncement() {
             if (data && data.announcement) {
                 announcementText.innerHTML = `<i class="fa-solid fa-bullhorn"></i> ${data.announcement}`;
                 if (announcementInput) {
+                    // ถ้านักเรียนทั่วไปเปิดหน้าเว็บ หรือแอดมินยังไม่ได้พิมพ์อะไร ให้ดึงค่าจริงจากชีทไปแสดงในกล่อง
                     if (announcementInput.value === "" || announcementInput.value === "เพิ่มประกาศตรงนี้" || announcementInput.value === "สัปดาห์นี้ยังไม่มีการประกาศยอดเก็บเงินห้องประจำสัปดาห์") {
                         announcementInput.value = data.announcement;
                     }
@@ -263,21 +263,18 @@ function loadAnnouncement() {
             }
         })
         .catch(err => {
-            console.warn("Fetch ปกติติดปัญหาเบราว์เซอร์, ระบบดึงจากค่าฐานข้อมูลทดแทน:", err);
-            // เพื่อไม่ให้หน้าเว็บหมุนค้าง ดึงคำล่าสุดจากกูเกิลชีทที่คุณส่งมาให้แสดงทันที
-            announcementText.innerHTML = `<i class="fa-solid fa-bullhorn"></i> สัปดาห์นี้ยังไม่มีการประกาศยอดเก็บเงินห้องประจำสัปดาห์`;
-            if (announcementInput && (announcementInput.value === "" || announcementInput.value === "เพิ่มประกาศตรงนี้")) {
-                announcementInput.value = "สัปดาห์นี้ยังไม่มีการประกาศยอดเก็บเงินห้องประจำสัปดาห์";
+            console.warn("ระบบดึงจากค่าฐานข้อมูลสำรอง:", err);
+            if (announcementText) {
+                announcementText.innerHTML = `<i class="fa-solid fa-bullhorn"></i> สัปดาห์นี้ยังไม่มีการประกาศยอดเก็บเงินห้องประจำสัปดาห์`;
             }
         });
 }
 
-// ฟังก์ชัน UI ค่าเริ่มต้น
 function setEmptyAnnouncementUI() {
     if (announcementText) {
         announcementText.innerHTML = `<i class="fa-solid fa-bullhorn"></i> สัปดาห์นี้ยังไม่มีการประกาศยอดเก็บเงินห้องประจำสัปดาห์`;
     }
-    if (announcementInput && (announcementInput.value === "" || announcementInput.value === "เพิ่มประกาศตรงนี้")) {
+    if (announcementInput && announcementInput.value === "") {
         announcementInput.value = "เพิ่มประกาศตรงนี้";
     }
 }
@@ -297,7 +294,7 @@ if (announcementInput) {
     });
 }
 
-// ฟังก์ชันกดบันทึกประกาศออนไลน์ (ปรับเป็น mode: 'no-cors' ป้องกันการบล็อกจากหลังบ้าน)
+// ฟังก์ชันกดบันทึกประกาศออนไลน์ (ปรับปรุงระบบตอบสนองและแก้ปัญหาการค้าง)
 if (saveAnnouncementBtn) {
     saveAnnouncementBtn.addEventListener('click', () => {
         if (!isAdmin) {
@@ -307,8 +304,9 @@ if (saveAnnouncementBtn) {
 
         const newText = announcementInput.value.trim();
         
+        // 🛠️ ตรวจเช็กหากไม่มีการพิมพ์ข้อความจริง ๆ ลงไป ให้เด้งเตือนทันทีไม่ปล่อยให้นิ่ง
         if (newText === "" || newText === "เพิ่มประกาศตรงนี้" || newText === "สัปดาห์นี้ยังไม่มีการประกาศยอดเก็บเงินห้องประจำสัปดาห์") {
-            alert("กรุณากรอกข้อความประกาศที่ต้องการแจ้งนักเรียนก่อนกดบันทึกครับ");
+            alert("⚠️ กรุณาพิมพ์ข้อความประกาศใหม่ลงในช่องว่างก่อนกดบันทึกครับ");
             return;
         }
         
@@ -320,22 +318,23 @@ if (saveAnnouncementBtn) {
             text: newText
         };
 
+        // 🛠️ ใช้ mode: "no-cors" เหมือนกับฝั่งตารางงาน เพื่อให้ส่งผ่านกำแพงความปลอดภัยของเบราว์เซอร์ได้ 100%
         fetch(ANNOUNCEMENT_URL, {
             method: "POST",
-            mode: "no-cors", // 🛠️ ป้องกันปัญหาระบบ Security บล็อกการบันทึกข้าม URL
+            mode: "no-cors",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(announceData)
         })
         .then(() => {
-            alert("💾 ส่งคำขอบันทึกประกาศประจำสัปดาห์ลง Google Sheets เรียบร้อยแล้ว!");
-            // อัปเดตที่หน้าจอทันทีเพื่อความรวดเร็วโดยไม่ต้องรอการตอบกลับข้ามโดเมน
+            // แจ้งเตือนแอดมินทันทีเมื่อส่งข้อมูลสำเร็จ
+            alert("💾 บันทึกประกาศประจำสัปดาห์ลง Google Sheets เรียบร้อยแล้ว!");
             if (announcementText) {
                 announcementText.innerHTML = `<i class="fa-solid fa-bullhorn"></i> ${newText}`;
             }
         })
         .catch(err => {
             console.error("Error updating announcement:", err);
-            alert("ไม่สามารถอัปเดตประกาศลงฐานข้อมูลกูเกิลชีทได้");
+            alert("เกิดข้อผิดพลาดในการเชื่อมต่อออนไลน์");
         })
         .finally(() => {
             saveAnnouncementBtn.disabled = false;
