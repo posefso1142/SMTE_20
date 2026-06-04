@@ -80,24 +80,23 @@ function updateUI() {
         if(adminPanel) adminPanel.classList.add('hidden');
         document.querySelectorAll('.admin-action-col').forEach(el => el.classList.add('hidden'));
     }
-    fetchTasksFromSheets(); // ดึงข้อมูลใหม่จาก Google Sheets ทุกครั้งที่อัปเดต UI
-    loadAnnouncement();     // 📢 พ่วงให้ดึงข้อมูลประกาศออนไลน์ใหม่ทุกครั้งที่มีการเปลี่ยนสถานะแอดมิน
+    fetchTasksFromSheets(); 
+    loadAnnouncement();     
 }
 
 // ==========================================
-// ฟังก์ชัน 1: ดึงข้อมูลจาก Google Sheets
+// ฟังก์ชัน 1: ดึงข้อมูลจาก Google Sheets (ตารางงาน)
 // ==========================================
 function fetchTasksFromSheets() {
     if (!taskList) return;
 
-    // แสดงสถานะระหว่างรอโหลดข้อมูล
     taskList.innerHTML = `<tr><td colspan="${isAdmin ? 6 : 5}" class="text-center" style="color: #a0aec0; padding: 20px;"><i class="fa-solid fa-spinner fa-spin"></i> กำลังโหลดตารางงานจาก Google Sheets...</td></tr>`;
 
     fetch(SCRIPT_URL)
         .then(res => res.json())
         .then(data => {
-            tasks = data; // เอาข้อมูลที่ได้เก็บเข้าตัวแปร tasks
-            renderTasks(); // สั่งวาดตารางงาน
+            tasks = data; 
+            renderTasks(); 
         })
         .catch(err => {
             console.error("Error fetching tasks:", err);
@@ -106,7 +105,7 @@ function fetchTasksFromSheets() {
 }
 
 // ==========================================
-// ฟังก์ชัน 2: วาดตารางงานบนหน้าเว็บ (ปรับฟอร์แมตเป็นตัวเลขป้องกัน iOS ตกบรรทัด)
+// ฟังก์ชัน 2: วาดตารางงานบนหน้าเว็บ
 // ==========================================
 function renderTasks() {
     taskList.innerHTML = '';
@@ -123,12 +122,10 @@ function renderTasks() {
         let thaiDate = '-';
 
         if (taskDate) {
-            // 🛠️ แก้บั๊กสำหรับ iOS/Safari: เปลี่ยนเครื่องหมายขีด (-) ให้เป็นสแลช (/) 
             const safeDateStr = taskDate.replace(/-/g, "/");
             const dateObj = new Date(safeDateStr);
             
             if (!isNaN(dateObj.getTime())) {
-                // 🛠️ สั่งปรับรูปแบบการแสดงผลเป็นตัวเลขทั้งหมด (เช่น 04/06/69) เพื่อลดการใช้พื้นที่หน้าจอ
                 thaiDate = dateObj.toLocaleDateString('th-TH', {
                     day: '2-digit',
                     month: '2-digit',
@@ -156,14 +153,14 @@ function renderTasks() {
 }
 
 // ==========================================
-// ฟังก์ชัน 3: เพิ่มงานใหม่ลง Google Sheets (แอดมินเท่านั้น)
+// ฟังก์ชัน 3: เพิ่มงานใหม่ลง Google Sheets
 // ==========================================
 taskForm.addEventListener('submit', (e) => {
     e.preventDefault();
     if (!isAdmin) return;
 
     const submitBtn = taskForm.querySelector("button[type='submit']");
-    const taskId = Math.floor(Math.random() * 100000); // สุ่มรหัส id เป็นตัวเลขอ้างอิง
+    const taskId = Math.floor(Math.random() * 100000); 
 
     const newTask = {
         action: "add",
@@ -174,7 +171,6 @@ taskForm.addEventListener('submit', (e) => {
         remark: document.getElementById('task-note').value
     };
 
-    // ล็อคปุ่มชั่วคราวขณะกำลังส่งข้อมูล
     if (submitBtn) {
         submitBtn.disabled = true;
         submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...`;
@@ -189,7 +185,7 @@ taskForm.addEventListener('submit', (e) => {
     .then(() => {
         alert('➕ เพิ่มงานใหม่ลง Google Sheets สำเร็จ!');
         taskForm.reset();
-        fetchTasksFromSheets(); // ดึงข้อมูลล่าสุดมาแสดงผลใหม่
+        fetchTasksFromSheets(); 
     })
     .catch(err => {
         console.error("Error adding task:", err);
@@ -204,7 +200,7 @@ taskForm.addEventListener('submit', (e) => {
 });
 
 // ==========================================
-// ฟังก์ชัน 4: ลบงานออกจาก Google Sheets (แอดมินเท่านั้น)
+// ฟังก์ชัน 4: ลบงานออกจาก Google Sheets
 // ==========================================
 window.deleteTask = function(idToDelete) {
     if (!isAdmin) return;
@@ -223,7 +219,7 @@ window.deleteTask = function(idToDelete) {
         })
         .then(() => {
             alert('🗑️ ลบงานออกจากระบบสำเร็จ!');
-            fetchTasksFromSheets(); // โหลดข้อมูลล่าสุดมาแสดงผลใหม่
+            fetchTasksFromSheets(); 
         })
         .catch(err => {
             console.error("Error deleting task:", err);
@@ -236,27 +232,30 @@ window.deleteTask = function(idToDelete) {
 updateUI();
 
 // ==========================================
-// 📢 ระบบจัดการประกาศเก็บเงินประจำสัปดาห์ (เวอร์ชันเชื่อมต่อออนไลน์สมบูรณ์)
+// 📢 ระบบจัดการประกาศเก็บเงินประจำสัปดาห์ (แก้ไขจุดดึงค่าภาษาไทย)
 // ==========================================
 const announcementText = document.getElementById('announcement-text');
 const announcementInput = document.getElementById('announcement-input');
 const saveAnnouncementBtn = document.getElementById('save-announcement-btn');
 
-// ฟังก์ชันดึงประกาศมาแสดงผลตอนเปิดหน้าเว็บ (เปลี่ยนจาก localStorage ไปดึงจาก Google Sheets ออนไลน์)
+// ฟังก์ชันดึงประกาศออนไลน์
 function loadAnnouncement() {
     if (!announcementText) return;
     
-    // แสดงสถานะหมุนติ้ว ๆ ระหว่างรอข้อมูลจากเซิร์ฟเวอร์
     announcementText.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> กำลังโหลดประกาศล่าสุด...`;
 
     fetch(ANNOUNCEMENT_URL)
         .then(res => res.json())
         .then(data => {
             if (data.announcement) {
-                // นำข้อมูลประกาศจริงจากแผ่นชีทมาแสดง
+                // อัปเดตข้อความกล่องสีฟ้า
                 announcementText.innerHTML = `<i class="fa-solid fa-bullhorn"></i> ${data.announcement}`;
-                if (announcementInput && (announcementInput.value === "" || announcementInput.value === "เพิ่มประกาศตรงนี้")) {
-                    announcementInput.value = data.announcement;
+                
+                // แก้บั๊กตรงนี้: ตรวจเช็กและใส่ข้อความลงในช่องพิมพ์ให้ตรงตามฐานข้อมูลชีท
+                if (announcementInput) {
+                    if (announcementInput.value === "" || announcementInput.value === "เพิ่มประกาศตรงนี้" || announcementInput.value === "สัปดาห์นี้ยังไม่มีการประกาศยอดเก็บเงินห้องประจำสัปดาห์") {
+                        announcementInput.value = data.announcement;
+                    }
                 }
             } else {
                 setEmptyAnnouncementUI();
@@ -268,25 +267,24 @@ function loadAnnouncement() {
         });
 }
 
-// ฟังก์ชันจัดการ UI กรณีไม่มีข้อมูลออนไลน์หรือเกิดข้อผิดพลาด
+// ฟังก์ชัน UI ค่าเริ่มต้น
 function setEmptyAnnouncementUI() {
     if (announcementText) {
         announcementText.innerHTML = `<i class="fa-solid fa-bullhorn"></i> สัปดาห์นี้ยังไม่มีการประกาศยอดเก็บเงินห้องประจำสัปดาห์`;
     }
-    if (announcementInput && announcementInput.value === "") {
+    if (announcementInput && (announcementInput.value === "" || announcementInput.value === "เพิ่มประกาศตรงนี้")) {
         announcementInput.value = "เพิ่มประกาศตรงนี้";
     }
 }
 
-// 🛠️ ระบบช่วยเคลียร์คำอัตโนมัติเมื่อแอดมินคลิกช่องพิมพ์ (คงของเดิมไว้)
+// 🛠️ ระบบช่วยเคลียร์คำอัตโนมัติเมื่อแอดมินคลิกช่องพิมพ์
 if (announcementInput) {
     announcementInput.addEventListener('focus', () => {
-        if (announcementInput.value === "เพิ่มประกาศตรงนี้") {
+        if (announcementInput.value === "เพิ่มประกาศตรงนี้" || announcementInput.value === "สัปดาห์นี้ยังไม่มีการประกาศยอดเก็บเงินห้องประจำสัปดาห์") {
             announcementInput.value = "";
         }
     });
 
-    // ถ้าแอดมินคลิกออกแล้วช่องพิมพ์ว่างเปล่า จะดึงคำว่า "เพิ่มประกาศตรงนี้" กลับมาให้ (คงของเดิมไว้)
     announcementInput.addEventListener('blur', () => {
         if (announcementInput.value.trim() === "") {
             announcementInput.value = "เพิ่มประกาศตรงนี้";
@@ -294,10 +292,9 @@ if (announcementInput) {
     });
 }
 
-// ฟังก์ชันสำหรับกดปุ่มบันทึกประกาศ (เปลี่ยนจากเขียนลงหน่วยความจำเครื่อง -> เขียนขึ้น Google Sheets)
+// ฟังก์ชันกดบันทึกประกาศออนไลน์
 if (saveAnnouncementBtn) {
     saveAnnouncementBtn.addEventListener('click', () => {
-        // 🔑 บล็อกเช็กสิทธิ์แอดมิน (คงของเดิมไว้)
         if (!isAdmin) {
             alert("❌ เฉพาะแอดมินที่เข้าสู่ระบบแล้วเท่านั้นจึงจะแก้ไขประกาศได้ครับ");
             return;
@@ -305,13 +302,11 @@ if (saveAnnouncementBtn) {
 
         const newText = announcementInput.value.trim();
         
-        // ถ้าไม่ได้พิมพ์อะไรเลย หรือปล่อยให้เป็นคำตั้งต้นแล้วกดบันทึก ระบบจะแจ้งเตือน (คงของเดิมไว้)
-        if (newText === "" || newText === "เพิ่มประกาศตรงนี้") {
+        if (newText === "" || newText === "เพิ่มประกาศตรงนี้" || newText === "สัปดาห์นี้ยังไม่มีการประกาศยอดเก็บเงินห้องประจำสัปดาห์") {
             alert("กรุณากรอกข้อความประกาศที่ต้องการแจ้งนักเรียนก่อนกดบันทึกครับ");
             return;
         }
         
-        // ล็อกปุ่มและขึ้นสถานะกำลังบันทึกออนไลน์
         saveAnnouncementBtn.disabled = true;
         saveAnnouncementBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...`;
         
@@ -320,7 +315,6 @@ if (saveAnnouncementBtn) {
             text: newText
         };
 
-        // ส่งข้อมูลขึ้นฐานข้อมูลกลางของระบบประกาศ
         fetch(ANNOUNCEMENT_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -330,7 +324,7 @@ if (saveAnnouncementBtn) {
         .then(data => {
             if (data.status === "success") {
                 alert("💾 บันทึกประกาศประจำสัปดาห์ทับลงใน Google Sheets สำเร็จ! (ทุกเครื่องเปลี่ยนตามทันที)");
-                loadAnnouncement(); // ดึงคำประกาศล่าสุดจากออนไลน์มาโชว์ทันที
+                loadAnnouncement(); 
             } else {
                 alert("เกิดข้อผิดพลาดจากระบบ: " + data.message);
             }
@@ -340,12 +334,11 @@ if (saveAnnouncementBtn) {
             alert("ไม่สามารถอัปเดตประกาศลงฐานข้อมูลกูเกิลชีทได้");
         })
         .finally(() => {
-            // ปลดล็อกปุ่มให้พร้อมพิมพ์ใหม่
             saveAnnouncementBtn.disabled = false;
             saveAnnouncementBtn.innerHTML = `<i class="fa-solid fa-save"></i> บันทึกประกาศ`;
         });
     });
 }
 
-// สั่งให้โหลดประกาศขึ้นมาแสดงผลทันทีที่เปิดหน้าเว็บครั้งแรก
+// สั่งโหลดประกาศทันทีเมื่อเปิดหน้าเว็บ
 loadAnnouncement();
