@@ -1,7 +1,12 @@
 // ==========================================================================
 // 📢 ข้อความประกาศประจำสัปดาห์ (เวลาจะเปลี่ยนประกาศ ให้มาแก้ข้อความในเครื่องหมายคำพูดตรงนี้ได้เลยครับ!)
 // ==========================================================================
-const CURRENT_ANNOUNCEMENT = "เก็บเงิน 20บาท ภายในวันศุกร์ จ่ายด้วย";
+let CURRENT_ANNOUNCEMENT = "เก็บเงิน 20บาท ภายในวันศุกร์ จ่ายด้วย";
+
+// โหลดค่าประกาศล่าสุดจากคลังข้อมูลในเบราว์เซอร์ (ถ้ามี) เพื่อให้แอดมินบันทึกเปลี่ยนได้แบบเรียลไทม์
+if (localStorage.getItem('savedAnnouncement')) {
+    CURRENT_ANNOUNCEMENT = localStorage.getItem('savedAnnouncement');
+}
 
 // ข้อมูล Admin ที่ฟิกซ์ไว้ตามเงื่อนไข
 const ADMIN_USER = "ADMIN_SMTE20";
@@ -79,6 +84,10 @@ function updateUI() {
     if (isAdmin) {
         if(adminPanel) adminPanel.classList.remove('hidden');
         document.querySelectorAll('.admin-action-col').forEach(el => el.classList.remove('hidden'));
+        
+        // เมื่อเป็นแอดมิน ให้ดึงประกาศปัจจุบันไปใส่ในช่องกรอกแก้ไขด้วย
+        const editAnnounceInput = document.getElementById('edit-announcement-input');
+        if (editAnnounceInput) editAnnounceInput.value = CURRENT_ANNOUNCEMENT;
     } else {
         if(adminPanel) adminPanel.classList.add('hidden');
         document.querySelectorAll('.admin-action-col').forEach(el => el.classList.add('hidden'));
@@ -107,7 +116,7 @@ function fetchTasksFromSheets() {
 }
 
 // ==========================================
-// ฟังก์ชัน 2: วาดตารางงานบนหน้าเว็บ
+// ฟังก์ชัน 2: วาดตารางงานบนหน้าเว็บ (เพิ่มระบบปุ่มแก้ไขดินสอสีเหลืองข้างปุ่มลบ)
 // ==========================================
 function renderTasks() {
     taskList.innerHTML = '';
@@ -148,7 +157,12 @@ function renderTasks() {
             <td>${desc}</td>
             <td><span style="background-color:#ffe3e3; color:#e63946; padding:4px 10px; border-radius:20px; font-size:0.85rem; white-space: nowrap; display: inline-block; font-weight: 500;">${thaiDate}</span></td>
             <td style="font-style: italic; color:#718096;">${note || '-'}</td>
-            ${isAdmin ? `<td class="admin-action-col"><button class="btn-delete" onclick="deleteTask(${task.id})"><i class="fa-solid fa-trash"></i></button></td>` : ''}
+            ${isAdmin ? `
+                <td class="admin-action-col">
+                    <button class="btn-edit" onclick="openEditModal(${task.id})" title="แก้ไขงาน"><i class="fa-solid fa-pencil"></i></button>
+                    <button class="btn-delete" onclick="deleteTask(${task.id})" title="ลบงาน"><i class="fa-solid fa-trash"></i></button>
+                </td>
+            ` : ''}
         `;
         taskList.appendChild(tr);
     });
@@ -234,15 +248,129 @@ window.deleteTask = function(idToDelete) {
 updateUI();
 
 // ==========================================
-// 📢 ระบบแสดงผลประกาศ (ดึงจากโค้ดแสดงขึ้นหน้าจอฝั่งนักเรียนปกติ)
+// 📢 ระบบแสดงผลและจัดการบันทึกประกาศ
 // ==========================================
 const announcementText = document.getElementById('announcement-text');
+const saveAnnouncementBtn = document.getElementById('saveAnnouncementBtn');
 
 function loadAnnouncement() {
     if (!announcementText) return;
-    // แสดงข้อความประกาศที่กำหนดไว้ในตัวแปร CURRENT_ANNOUNCEMENT บนสุดของไฟล์
     announcementText.innerHTML = `<i class="fa-solid fa-bullhorn"></i> ${CURRENT_ANNOUNCEMENT}`;
+}
+
+// ควบคุมการบันทึกประกาศใหม่
+if (saveAnnouncementBtn) {
+    saveAnnouncementBtn.addEventListener('click', () => {
+        const newAnnounce = document.getElementById('edit-announcement-input').value.trim();
+        if (newAnnounce === '') {
+            alert('กรุณากรอกข้อความประกาศก่อนบันทึก!');
+            return;
+        }
+        CURRENT_ANNOUNCEMENT = newAnnounce;
+        localStorage.setItem('savedAnnouncement', newAnnounce); // เซฟลง LocalStorage เพื่อให้จดจำไว้
+        loadAnnouncement();
+        alert('💾 บันทึกและเปลี่ยนประกาศประจำสัปดาห์สำเร็จ!');
+    });
 }
 
 // สั่งให้โหลดประกาศขึ้นมาแสดงผลทันทีที่เปิดหน้าเว็บครั้งแรก
 loadAnnouncement();
+
+// ==========================================
+// 🌓 ระบบควบคุมการสลับโหมดมืด (Dark Mode / Light Mode)
+// ==========================================
+const themeToggleBtn = document.getElementById('themeToggleBtn');
+
+// ตรวจสอบสถานะสีธีมที่เคยเซฟไว้
+if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark-theme');
+    if (themeToggleBtn) themeToggleBtn.querySelector('i').className = 'fa-solid fa-sun';
+}
+
+if (themeToggleBtn) {
+    themeToggleBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-theme');
+        const isDark = document.body.classList.contains('dark-theme');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        themeToggleBtn.querySelector('i').className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+    });
+}
+
+// ==========================================
+// ✏️ ระบบเปิด/ปิดและบันทึกหน้าต่างแก้ไขข้อมูลงาน
+// ==========================================
+const editModal = document.getElementById('editModal');
+const closeEditModal = document.querySelector('.close-edit-modal');
+const editTaskForm = document.getElementById('edit-task-form');
+
+// ฟังก์ชันดึงค่าเดิมมากรอกแล้วเปิด Modal
+window.openEditModal = function(id) {
+    const task = tasks.find(t => t.id == id);
+    if (!task) return;
+
+    document.getElementById('edit-task-id').value = task.id;
+    document.getElementById('edit-task-name').value = task.name || task.task_name || '';
+    document.getElementById('edit-task-desc').value = task.desc || task.task_detail || '';
+    
+    let rawDate = task.date || task.due_date || '';
+    if (rawDate.includes('T')) rawDate = rawDate.split('T')[0];
+    document.getElementById('edit-task-date').value = rawDate;
+    
+    document.getElementById('edit-task-note').value = task.note || task.remark || '';
+
+    if (editModal) editModal.classList.add('show');
+};
+
+// ปิด Modal เมื่อกดกากบาท
+if (closeEditModal) {
+    closeEditModal.addEventListener('click', () => {
+        if (editModal) editModal.classList.remove('show');
+    });
+}
+
+// ยืนยันการแก้ไขข้อมูลส่งไป Google Sheets
+if (editTaskForm) {
+    editTaskForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (!isAdmin) return;
+
+        const submitBtn = editTaskForm.querySelector("button[type='submit']");
+        const idToSend = document.getElementById('edit-task-id').value;
+
+        const updatedTask = {
+            action: "edit", 
+            id: parseInt(idToSend),
+            task_name: document.getElementById('edit-task-name').value,
+            task_detail: document.getElementById('edit-task-desc').value,
+            due_date: document.getElementById('edit-task-date').value,
+            remark: document.getElementById('edit-task-note').value
+        };
+
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...`;
+        }
+
+        fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updatedTask)
+        })
+        .then(() => {
+            alert('📝 แก้ไขข้อมูลงานใน Google Sheets สำเร็จ!');
+            if (editModal) editModal.classList.remove('show');
+            fetchTasksFromSheets(); 
+        })
+        .catch(err => {
+            console.error("Error editing task:", err);
+            alert("เกิดข้อผิดพลาดในการแก้ไขข้อมูล");
+        })
+        .finally(() => {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> บันทึกการแก้ไข`;
+            }
+        });
+    });
+}
