@@ -14,9 +14,14 @@
 
     <nav class="hotbar">
         <div class="hotbar-container">
-            <button class="admin-avatar-btn" id="loginBtn" title="สำหรับแอดมิน">
-                <i class="fa-solid fa-user-gear"></i>
-            </button>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <button class="admin-avatar-btn" id="loginBtn" title="สำหรับแอดมิน">
+                    <i class="fa-solid fa-user-gear"></i>
+                </button>
+                <button class="theme-toggle-btn" id="themeToggleBtn" title="เปลี่ยนโหมดสี">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
             
             <div class="shortcut-menu">
                 <a href="#task-section" class="shortcut-item">
@@ -47,6 +52,14 @@
                 <input type="text" id="task-note" placeholder="หมายเหตุ (ถ้ามี)">
                 <button type="submit" class="btn-add"><i class="fa-solid fa-plus"></i> เพิ่มงานใหม่</button>
             </form>
+
+            <div class="announcement-edit-box">
+                <h4><i class="fa-solid fa-bullhorn"></i> แก้ไขข้อความประกาศประจำสัปดาห์</h4>
+                <div class="announcement-input-group">
+                    <input type="text" id="edit-announcement-input" placeholder="ระบุข้อความประกาศใหม่ที่นี่...">
+                    <button id="saveAnnouncementBtn" class="btn-save-announcement"><i class="fa-solid fa-floppy-disk"></i> บันทึกประกาศ</button>
+                </div>
+            </div>
 
             <button id="logoutBtn" class="btn-logout" style="margin-top: 15px;">ออกจากระบบแอดมิน</button>
         </section>
@@ -84,7 +97,7 @@
                 <i class="fa-solid fa-bounce fa-money-bill-wave" style="color: #2ec4b6;"></i>
                 <h2>เก็บเงินประจำสัปดาห์</h2>
             </div>
-            <p class="section-desc">ตรวจสอบสถานะการออมเงินและค่าใช้จ่ายส่วนกลางของห้องเรียนได้ที่นี่</p>
+            <p class="section-desc">ตรวจสอบสถานะการออมเงินและค่าใช้จ่ายส่วนกลาง of ห้องเรียนได้ที่นี่</p>
             
             <div id="announcement-box" class="announcement-container">
                 <p id="announcement-text"><i class="fa-solid fa-bullhorn"></i> กำลังโหลดประกาศสัปดาห์นี้...</p>
@@ -113,6 +126,42 @@
             <button id="submitLogin" class="btn-login-submit">เข้าสู่ระบบ</button>
         </div>
     </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close-edit-modal">&times;</span>
+            <h3><i class="fa-solid fa-pen-to-square" style="color: #ffb703;"></i> แก้ไขข้อมูลงาน</h3>
+            <form id="edit-task-form" style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
+                <input type="hidden" id="edit-task-id">
+                <div class="input-group" style="margin: 0;">
+                    <label for="edit-task-name">ชื่องาน</label>
+                    <input type="text" id="edit-task-name" required>
+                </div>
+                <div class="input-group" style="margin: 0;">
+                    <label for="edit-task-desc">รายละเอียดงาน</label>
+                    <input type="text" id="edit-task-desc" required>
+                </div>
+                <div class="input-group" style="margin: 0;">
+                    <label for="edit-task-date">วันที่ต้องส่ง</label>
+                    <input type="date" id="edit-task-date" required>
+                </div>
+                <div class="input-group" style="margin: 0;">
+                    <label for="edit-task-note">หมายเหตุ</label>
+                    <input type="text" id="edit-task-note">
+                </div>
+                <button type="submit" class="btn-login-submit" style="background-color: #ffb703; color: white; margin-top: 5px;">
+                    <i class="fa-solid fa-floppy-disk"></i> บันทึกการแก้ไข
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <p>© 2026 SMTE_20. All Rights Reserved.</p>
+            <p class="dev-credit">Developed by Thanaphon</p>
+        </div>
+    </footer>
 
     <script src="js/script.js"></script>
 </body>
