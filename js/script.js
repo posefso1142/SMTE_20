@@ -297,7 +297,7 @@ if (themeToggleBtn) {
 }
 
 // ==========================================
-// ✏️ ระบบเปิด/ปิดและบันทึกหน้าต่างแก้ไขข้อมูลงาน
+// ✏️ ระบบเปิด/ปิดและบันทึกหน้าต่างแก้ไขข้อมูลงาน (แก้ไขให้ตรงกับ Google Sheets)
 // ==========================================
 const editModal = document.getElementById('editModal');
 const closeEditModal = document.querySelector('.close-edit-modal');
@@ -339,7 +339,7 @@ if (editTaskForm) {
 
         const updatedTask = {
             action: "edit", 
-            id: parseInt(idToSend),
+            id: idToSend, // 🌟 ลบ parseInt() ออก เพื่อให้ชนิดข้อมูล (String) ตรงกับใน Google Sheets เป๊ะๆ
             task_name: document.getElementById('edit-task-name').value,
             task_detail: document.getElementById('edit-task-desc').value,
             due_date: document.getElementById('edit-task-date').value,
