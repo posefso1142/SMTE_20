@@ -389,7 +389,7 @@ body.dark-theme .custom-table td[style*="color: #718096"] {
 }
 
 /* ==========================================================================
-   🛠️ 6. Admin Panel & UI Controls (ฉบับอัปเกรด Contrast โหมดมืดให้อ่านง่ายสุด ๆ)
+   🛠️ 6. Admin Panel & UI Controls (ฉบับลบระบบประกาศออกถาวร - มินิมอลขั้นสุด)
    ========================================================================== */
 .admin-panel {
     background: var(--admin-panel-bg); 
@@ -422,14 +422,13 @@ body.dark-theme .custom-table td[style*="color: #718096"] {
     align-items: center;
 }
 
-/* ปรับปรุงช่อง Input ในแผงแอดมิน */
+/* ปรับปรุงช่อง Input ในโหมดมืดให้สว่างชัดอ่านง่ายที่สุด */
 .admin-panel input, 
 .admin-panel select, 
 .admin-panel textarea {
     width: 100%;
     height: 48px; 
     padding: 12px 18px;
-    /* ในโหมดมืดจะใช้สีเทา Slate ที่สว่างกว่าพื้นหลัง เพื่อสร้างมิติ */
     background-color: var(--input-bg);
     color: var(--input-text) !important;
     border: 1.5px solid var(--input-border);
@@ -440,30 +439,29 @@ body.dark-theme .custom-table td[style*="color: #718096"] {
     transition: var(--transition);
 }
 
-/* 🌟 แก้ไขปัญหาระดับชาติ: สั่งให้ตัวอักษรบอกใบ้ (Placeholder) สว่างขึ้นชัดเจนในโหมดมืด */
+/* สั่งล็อกสี Placeholder ในโหมดมืดไม่ให้จมมืด */
 .admin-panel input::placeholder,
 .admin-panel textarea::placeholder {
-    color: #94a3b8 !important; /* สีเทาสว่าง อ่านง่ายแน่นอน ไม่มืดกลืน */
-    opacity: 1;
+    color: #94a3b8 !important;
+    opacity: 1 !important;
 }
-body.dark-theme .admin-panel input::placeholder {
-    color: #cbd5e0 !important; /* เพิ่มความสว่างนวลขึ้นอีกเมื่อเปิดโหมดมืด */
+body.dark-theme .admin-panel input::placeholder,
+body.dark-theme .admin-panel textarea::placeholder {
+    color: #cbd5e0 !important;
+    opacity: 1 !important;
 }
 
-/* เอฟเฟกต์ตอนคลิกกรอกข้อมูล (Focus) */
 .admin-panel input:focus, 
 .admin-panel select:focus {
     border-color: var(--primary-color);
     box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.25);
-    background-color: var(--input-bg);
 }
 
-/* ช่องเลือกวันที่ให้แสดงไอคอนปฏิทินเป็นสีสว่างในโหมดมืด */
 body.dark-theme .admin-panel input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(1); /* พลิกสีไอคอนปฏิทินจากดำเป็นขาวให้เห็นชัดๆ */
+    filter: invert(1);
 }
 
-/* ปุ่มเพิ่มงานใหม่ (สีเขียวมิ้นต์ไล่เฉด) */
+/* ปุ่มเพิ่มงานใหม่ (สีเขียวมิ้นต์พรีเมียม) */
 .btn-add {
     height: 48px; 
     background: linear-gradient(135deg, #2ec4b6 0%, #20b2aa 100%); 
@@ -486,79 +484,34 @@ body.dark-theme .admin-panel input[type="date"]::-webkit-calendar-picker-indicat
     box-shadow: 0 6px 20px rgba(46, 196, 182, 0.35);
 }
 
-/* โซนแก้ไขข้อความประกาศ */
-.announcement-edit-box {
-    padding-top: 25px;
-    border-top: 1px dashed var(--border-color);
-}
-.announcement-edit-box h4 {
-    color: var(--admin-panel-text) !important;
-    margin-bottom: 12px;
-    font-size: 1.05rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-.announcement-input-group {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-}
-.announcement-input-group input {
-    flex: 1; 
-}
-
-/* ปุ่มบันทึกประกาศ */
-.btn-save-announcement {
-    height: 48px; 
-    background: linear-gradient(135deg, #4a90e2 0%, #2563eb 100%);
-    color: white !important;
-    border: none;
-    padding: 0 24px;
-    border-radius: 12px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
-    white-space: nowrap;
-    transition: var(--transition);
-}
-.btn-save-announcement:hover {
-    background: linear-gradient(135deg, #357abd 0%, #1d4ed8 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
-}
-
-/* 🚪 ปรับแต่งปุ่มออกจากระบบไม่ให้พลาดยาวเต็มจอ (ดูมินิมอลขึ้นมาก) */
+/* 🚪 ปุ่มออกจากระบบแบบ Compact จัดวางชิดซ้ายสวยงาม ไม่ยืดพาดจอ */
 .admin-footer-actions {
-    display: flex;
-    justify-content: flex-start;
-    margin-top: 5px;
+    display: flex !important;
+    justify-content: flex-start !important;
+    margin-top: 5px !important;
+    width: 100% !important;
 }
 .btn-logout { 
-    background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%); 
+    background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%) !important; 
     color: white !important; 
-    border: none; 
-    padding: 12px 24px; /* ปรับขนาดปุ่มให้เป็นรูปทรงแคปซูล/กล่องที่พอดีมือ */
-    border-radius: 12px; 
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    box-shadow: 0 4px 12px rgba(225, 29, 72, 0.2);
-    width: auto; /* สั่งยกเลิกการขยายเต็มจอในโหมดมืด */
-    transition: var(--transition);
+    border: none !important; 
+    padding: 12px 24px !important; 
+    border-radius: 12px !important; 
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    box-shadow: 0 4px 12px rgba(225, 29, 72, 0.2) !important;
+    width: auto !important; 
+    max-width: max-content !important;
+    transition: var(--transition) !important;
 }
 .btn-logout:hover { 
-    background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(225, 29, 72, 0.3);
+    background: linear-gradient(135deg, #e11d48 0%, #be123c 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 15px rgba(225, 29, 72, 0.3) !important;
 }
 
 /* หัวข้อหลักของแผงควบคุม */
