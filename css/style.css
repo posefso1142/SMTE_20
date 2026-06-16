@@ -19,7 +19,13 @@
     --input-bg: #ffffff;
     --input-text: #4a5568;
     --input-border: #cbd5e0;
-    --announcement-bg: #f0f7ff;
+    
+    /* 🔴 [ปรับปรุงใหม่] ระบบสีกล่องประกาศสำหรับโหมดสว่าง (โทนแดงแจ้งเตือนนุ่มนวล) */
+    --announcement-bg: #fff5f5;        /* พื้นหลังแดงอมชมพูจางๆ */
+    --announcement-border: #fed7d7;    /* เส้นขอบแดงพาสเทลนุ่มตา */
+    --announcement-text: #9b2c2c;      /* ตัวอักษรสีแดงเข้มเพื่อให้อ่านง่ายและชัดเจน */
+    --announcement-icon: #e53e3e;      /* สีไอคอนแจ้งเตือนสีแดงเด่น */
+    
     --admin-panel-bg: #fff3cd;   /* สีเหลืองนวลเดิม */
     --admin-panel-border: #ffeeba;
     --admin-panel-text: #856404;
@@ -38,7 +44,13 @@ body.dark-theme {
     --input-bg: #334155;
     --input-text: #f8fafc;
     --input-border: #475569;
-    --announcement-bg: #1e293b;
+    
+    /* 🔴 [ปรับปรุงใหม่] ระบบสีกล่องประกาศสำหรับโหมดมืด (โทนแดงนีออนพาสเทล สบายตาในที่มืด) */
+    --announcement-bg: rgba(254, 215, 215, 0.04); /* แดงโปร่งแสงกลืนกับพื้นหลังเข้ม */
+    --announcement-border: rgba(245, 101, 101, 0.3); /* เส้นขอบแดงจางๆ ไม่สว่างโร่จนเกินไป */
+    --announcement-text: #fecaca;                  /* ตัวอักษรแดงพาสเทลสว่าง อ่านง่าย ไม่แสบตา */
+    --announcement-icon: #fc8181;                  /* ไอคอนแดงสว่างนวลตา */
+    
     --admin-panel-bg: #1e2030;  /* แผงแอดมินคุมโทนเข้ม */
     --admin-panel-border: #854d0e;
     --admin-panel-text: #fef08a;
@@ -326,42 +338,6 @@ body.dark-theme .custom-table td[style*="color: #718096"] {
     transform: scale(1.05);
 }
 
-/* ปุ่มแก้ไขสีเหลือง (Edit) */
-.btn-edit {
-    background-color: #ffb703;
-    color: white !important;
-    border: none;
-    padding: 6px 10px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: var(--transition);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-.btn-edit:hover {
-    background-color: #fb8500;
-    transform: scale(1.05);
-}
-
-/* ปุ่มลบสีแดง (Delete) */
-.btn-delete { 
-    background: #e63946; 
-    color: white !important; 
-    border: none; 
-    padding: 6px 10px; 
-    border-radius: 6px; 
-    cursor: pointer; 
-    transition: var(--transition);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-.btn-delete:hover {
-    background-color: #c92a35;
-    transform: scale(1.05);
-}
-
 /* ==========================================================================
    5. ปุ่มและรายละเอียดหน้าเก็บเงินห้อง
    ========================================================================== */
@@ -514,86 +490,6 @@ body.dark-theme .admin-panel input[type="date"]::-webkit-calendar-picker-indicat
     box-shadow: 0 6px 15px rgba(225, 29, 72, 0.3) !important;
 }
 
-/* หัวข้อหลักของแผงควบคุม */
-.admin-panel h3 { 
-    color: var(--admin-panel-text) !important; 
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin-bottom: 5px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-/* ฟอร์มเพิ่มงานใหม่ */
-.task-form {
-    display: grid;
-    /* แบ่งคอลัมน์แบบยืดหยุ่น ถ้าจอใหญ่จะเรียงกันสวยงาม */
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 15px; /* ช่องไฟระหว่างช่องอินพุตและปุ่ม */
-    align-items: center;
-}
-
-/* ปรับปรุงช่อง Input ทุกประเภทในหน้า Admin */
-.admin-panel input, 
-.admin-panel select, 
-.admin-panel textarea {
-    width: 100%;
-    height: 48px; /* ล็อกความสูงมาตรฐานให้เท่ากันทุกช่องรวมถึงช่องวันที่ */
-    padding: 12px 18px;
-    background-color: var(--input-bg);
-    color: var(--input-text);
-    border: 1.5px solid var(--input-border);
-    border-radius: 12px; /* ความมนแบบโมเดิร์นกำลังดี */
-    outline: none;
-    font-size: 0.95rem;
-    font-family: 'Prompt', sans-serif;
-    transition: var(--transition);
-}
-
-/* เอฟเฟกต์ตอนแอดมินคลิกพิมพ์ (Focus State) */
-.admin-panel input:focus, 
-.admin-panel select:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.15); /* แสงนีออนฟุ้ง ๆ สไตล์ UI สมัยใหม่ */
-    background-color: var(--white);
-}
-
-/* ล้างสไตล์จืด ๆ ของช่องเลือกวันที่ (Date Picker) ให้กลืนเข้ากับเพื่อน */
-.admin-panel input[type="date"] {
-    appearance: none;
-    -webkit-appearance: none;
-    cursor: pointer;
-}
-
-/* ปุ่มเพิ่มงานใหม่ (ปุ่มสีเขียวมิ้นต์สุดล้ำ) */
-.btn-add {
-    height: 48px; /* สูงเท่าช่องอินพุตเป๊ะ ๆ */
-    background: linear-gradient(135deg, #2ec4b6 0%, #20b2aa 100%); /* ไล่เฉดสีให้ดูมีมิติ */
-    color: white !important;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    box-shadow: 0 4px 15px rgba(46, 196, 182, 0.25);
-    transition: var(--transition);
-}
-
-.btn-add:hover { 
-    background: linear-gradient(135deg, #249a8f 0%, #1a8c84 100%);
-    transform: translateY(-2.5px); /* ขยับลอยขึ้นเล็กน้อยเวลามีคนชี้ */
-    box-shadow: 0 6px 20px rgba(46, 196, 182, 0.35);
-}
-
-.btn-add:active {
-    transform: translateY(0);
-}
-
 /* โซนพิมพ์แก้ไขข้อความประกาศของเด็กรอบห้อง */
 .announcement-edit-box {
     padding-top: 25px;
@@ -645,117 +541,6 @@ body.dark-theme .admin-panel input[type="date"]::-webkit-calendar-picker-indicat
     transform: translateY(-2.5px);
     box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
 }
-
-/* ปุ่มออกจากระบบแอดมิน (ย้ายลงมาด้านล่างสุด แยกสัดส่วนชัดเจน) */
-.admin-footer-actions {
-    display: flex;
-    justify-content: flex-start;
-    margin-top: 10px;
-}
-
-.btn-logout { 
-    background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%); /* แดงพาสเทลโมเดิร์น */
-    color: white !important; 
-    border: none; 
-    padding: 10px 20px; 
-    border-radius: 10px; 
-    font-size: 0.9rem;
-    font-weight: 550;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    box-shadow: 0 4px 12px rgba(225, 29, 72, 0.2);
-    transition: var(--transition);
-}
-
-.btn-logout:hover { 
-    background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(225, 29, 72, 0.3);
-}
-
-.admin-panel h3 { color: var(--admin-panel-text) !important; margin-bottom: 15px; }
-
-.task-form {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 10px;
-    margin-bottom: 15px;
-}
-
-.task-form input, .input-group input {
-    padding: 10px 15px;
-    background-color: var(--input-bg);
-    color: var(--input-text);
-    border: 1px solid var(--input-border);
-    border-radius: 8px;
-    outline: none;
-    font-size: 0.95rem;
-    transition: var(--transition);
-}
-
-.task-form input:focus, .input-group input:focus {
-    border-color: var(--primary-color);
-}
-
-.btn-add {
-    background-color: #2ec4b6;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: var(--transition);
-}
-.btn-add:hover { background-color: #249a8f; }
-
-/* โซนพิมพ์แก้ข้อความประกาศของ Admin */
-.announcement-edit-box {
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px dashed var(--border-color);
-}
-.announcement-edit-box h4 {
-    color: var(--admin-panel-text) !important;
-    margin: 0 0 10px 0;
-    font-size: 0.95rem;
-}
-.announcement-input-group {
-    display: flex;
-    gap: 8px;
-}
-.announcement-input-group input {
-    flex: 1;
-}
-.btn-save-announcement {
-    background-color: #2563eb;
-    color: white;
-    border: none;
-    padding: 0 16px;
-    border-radius: 8px;
-    font-family: 'Prompt', sans-serif;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-.btn-save-announcement:hover {
-    background-color: #1d4ed8;
-}
-
-/* ปุ่มออกจากระบบแอดมิน */
-.btn-logout { 
-    background: #e63946; 
-    color: white; 
-    border: none; 
-    padding: 8px 16px; 
-    border-radius: 8px; 
-    cursor: pointer;
-    font-weight: 500;
-    margin-top: 15px;
-    transition: var(--transition);
-}
-.btn-logout:hover { background: #c92a35; }
 
 /* ==========================================================================
    7. Modal Popup Window (Login & Edit Modal)
@@ -819,33 +604,52 @@ body.dark-theme .admin-panel input[type="date"]::-webkit-calendar-picker-indicat
 }
 
 /* ==========================================================================
-   📢 ส่วนแสดงผล: ตกแต่งกล่องข้อความประกาศ (สำหรับหน้านักเรียน)
+   📢 ส่วนแสดงผล: ตกแต่งกล่องข้อความประกาศปิดระบบโอนเงิน (สำหรับหน้านักเรียน)
    ========================================================================== */
 .announcement-container {
-    background-color: var(--announcement-bg);      /* เปลี่ยนตามธีม */
-    border-left: 5px solid var(--primary-color);  /* เส้นขอบสีฟ้ายึดความเด่น */
-    padding: 15px 20px;
-    border-radius: 8px;
-    max-width: 600px;
-    margin: 0 auto 25px auto;        /* จัดกึ่งกลาง และเว้นระยะห่างก่อนถึงปุ่ม */
+    background-color: var(--announcement-bg);      
+    border-left: 5px solid var(--announcement-icon); /* แถบสีแดงหนาด้านซ้าย เพิ่มความหนักแน่น */
+    border-top: 1px solid var(--announcement-border);
+    border-right: 1px solid var(--announcement-border);
+    border-bottom: 1px solid var(--announcement-border);
+    padding: 16px 22px;
+    border-radius: 12px;                       /* ดีไซน์โค้งมนเข้ากับกล่องอื่น */
+    max-width: 650px;
+    margin: 0 auto 25px auto;                  /* จัดวางกึ่งกลางหน้าจออย่างสมดุล */
     text-align: left;
-    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.05);
-    border-top: 1px solid var(--border-color);
-    border-right: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 4px 20px rgba(229, 62, 62, 0.05); /* เพิ่มเงาสีแดงจางๆ เพื่อมิติที่พรีเมียม */
+    backdrop-filter: blur(4px);                /* เอฟเฟกต์กระจกฝ้าเมื่อซ้อนบนโหมดมืด */
+    transition: var(--transition);
+    
+    /* เล่นแอนิเมชันชีพจร (Pulse) เบาๆ ดึงสายตาแต่ไม่กวนใจ */
+    animation: alert-pulse 3s infinite ease-in-out;
+}
+
+@keyframes alert-pulse {
+    0% { box-shadow: 0 4px 20px rgba(229, 62, 62, 0.05); }
+    50% { box-shadow: 0 4px 20px rgba(229, 62, 62, 0.15); }
+    100% { box-shadow: 0 4px 20px rgba(229, 62, 62, 0.05); }
 }
 
 .announcement-container p {
-    color: var(--dark-blue) !important;
-    font-size: 0.95rem;
-    font-weight: 500;
+    color: var(--announcement-text) !important; /* บังคับสลับสีตัวหนังสือตาม Light/Dark Theme */
+    font-size: 1rem;                             /* ปรับให้ออกแนวตัวใหญ่ชัดเจน */
+    font-weight: 600;                            /* ดีไซน์ตัวหนาแบบกึ่งทางการ */
     line-height: 1.6;
-    white-space: pre-line;           /* ช่วยให้ถ้าเคาะสเปซหรือเว้นบรรทัด ข้อความจะขึ้นบรรทัดใหม่ตามจริง */
+    white-space: pre-line;                       
+    display: flex;
+    align-items: center;
+    gap: 10px;                                   /* เว้นระยะห่างระหว่างไอคอนและข้อความ */
 }
 
 .announcement-container p i {
-    color: var(--primary-color);
-    margin-right: 8px;
+    color: var(--announcement-icon) !important;  /* สีไอคอนปรับตามธีม */
+    font-size: 1.2rem;                           /* ขยายขนาดไอคอนเตือนความจำ */
+}
+
+/* 🌓 เพิ่มมิติพิเศษออร่าเรืองแสงให้กับตัวอักษรเมื่ออยู่ในโหมดมืด */
+body.dark-theme .announcement-container p {
+    text-shadow: 0 0 8px rgba(245, 101, 101, 0.2);
 }
 
 /* ==========================================================================
