@@ -561,6 +561,10 @@ body.dark-theme .admin-panel input[type="date"]::-webkit-calendar-picker-indicat
     position: relative; 
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     border: 1px solid var(--border-color);
+    
+    /* 🛠️ ส่วนที่เพิ่มตัวแก้บัคสัญชาติไทย: ป้องกันปุ่มจมหายทะลุขอบล่างเมื่อเปิดบน iPad/มือถือ */
+    max-height: 85vh;
+    overflow-y: auto;
 }
 .close-modal, .close-edit-modal { 
     position: absolute; 
@@ -592,6 +596,12 @@ body.dark-theme .admin-panel input[type="date"]::-webkit-calendar-picker-indicat
     .task-form { grid-template-columns: 1fr; }
     .announcement-input-group { flex-direction: column; }
     .btn-save-announcement { padding: 10px; }
+    
+    /* 🛠️ ส่วนที่เพิ่มตัวแก้บัค: ดันกล่องขึ้นด้านบนอัตโนมัติเวลานิ้วจิ้มช่องพิมพ์เพื่อหลบคีย์บอร์ด */
+    .modal {
+        align-items: flex-start;
+        padding-top: 10vh;
+    }
 }
 
 /* 🛠️ ล็อกขนาดคอลัมน์วันที่ในตาราง ไม่ให้โดนบีบจนหักขึ้นบรรทัดใหม่ */
