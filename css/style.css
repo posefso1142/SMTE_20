@@ -16,17 +16,19 @@
     --hotbar-bg: rgba(255, 255, 255, 0.85);
     --border-color: rgba(74, 144, 226, 0.15);
     --table-hover: rgba(230, 240, 250, 0.4);
-    --input-bg: #ffffff;
-    --input-text: #2d3748;
+    
+    /* 🌟 สีของกล่องพิมพ์ (Input) โหมดสว่าง */
+    --input-bg: #f8fafc;         /* เทาฟ้าสว่างๆ ให้กล่องไม่แบนกลืนกับสีขาว */
+    --input-text: #1e293b;
     --input-border: #e2e8f0;
     
-    /* 🔴 ระบบสีกล่องประกาศสำหรับโหมดสว่าง (โทนแดงแจ้งเตือนนุ่มนวล) */
+    /* 🔴 ระบบสีกล่องประกาศสำหรับโหมดสว่าง */
     --announcement-bg: #fff5f5;        
     --announcement-border: #fed7d7;    
     --announcement-text: #9b2c2c;      
     --announcement-icon: #e53e3e;      
     
-    --admin-panel-bg: #ffffff;   /* 🌟 ปรับพื้นหลังแผงแอดมินโหมดสว่างให้คลีน สะอาดตา ไม่เหลืองจนเก่า */
+    --admin-panel-bg: #ffffff;   
     --admin-panel-border: #e2e8f0;
     --admin-panel-text: #1e3d59;
 }
@@ -42,10 +44,10 @@ body.dark-theme {
     --table-hover: rgba(51, 65, 85, 0.5);
     --secondary-color: #334155; 
     
-    /* 🌟 ปรับปรุงช่อง Input ในโหมดมืดไม่ให้ขาวกระแทกตา และพิมพ์เห็นชัดเจน */
-    --input-bg: #1e293b;
+    /* 🌟 สีของกล่องพิมพ์ (Input) โหมดมืด */
+    --input-bg: #0f172a;        /* สีกรมท่าเข้มลึก ให้ดูบุ๋มลงไปมีมิติ */
     --input-text: #f8fafc;
-    --input-border: #475569;
+    --input-border: #334155;
     
     /* 🔴 ระบบสีกล่องประกาศสำหรับโหมดมืด */
     --announcement-bg: rgba(254, 215, 215, 0.04); 
@@ -53,7 +55,7 @@ body.dark-theme {
     --announcement-text: #fecaca;                  
     --announcement-icon: #fc8181;                  
     
-    --admin-panel-bg: #1e293b;  /* แผงแอดมินคุมโทนเข้มหรูหรา */
+    --admin-panel-bg: #1e293b;  
     --admin-panel-border: #334155;
     --admin-panel-text: #f8fafc;
 }
@@ -357,7 +359,7 @@ body.dark-theme .custom-table td[style*="color: #718096"] {
 }
 
 /* ==========================================================================
-   🛠️ 6. Admin Panel & UI Controls (ปรับโฉมใหม่ให้เรียงสวยงามเป็นสัดส่วน ไม่ยืดยาวล้นจอ)
+   🛠️ 6. Admin Panel (แผงควบคุม)
    ========================================================================== */
 .admin-panel {
     background: var(--admin-panel-bg); 
@@ -381,7 +383,6 @@ body.dark-theme .custom-table td[style*="color: #718096"] {
     gap: 10px;
 }
 
-/* 🌟 ปรับ Grid ฟอร์มเพิ่มงานใหม่ให้แบ่งสัดส่วนสวยงาม (ไม่เรียงแถวเดียวยาวจนเบี้ยว) */
 .task-form {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -389,48 +390,74 @@ body.dark-theme .custom-table td[style*="color: #718096"] {
     align-items: flex-end;
 }
 
+/* ==========================================================================
+   ✨ [ใหม่ล่าสุด] อัปเกรดความสวยงามกล่องข้อความ (Inputs) สไตล์แอปยุคใหม่ 
+   ทั้งในแผงแอดมิน (Admin Panel) และ ป๊อปอัป (Modal)
+   ========================================================================== */
 .admin-panel input, 
 .admin-panel select, 
-.admin-panel textarea {
+.admin-panel textarea,
+.modal-content input {
     width: 100%;
-    height: 48px; 
-    padding: 12px 18px;
+    height: 52px; /* เพิ่มความสูงให้โปร่ง โล่ง พิมพ์ง่าย */
+    padding: 0 18px; /* เว้นระยะจากขอบซ้ายขวาให้สวยงาม */
     background-color: var(--input-bg);
     color: var(--input-text) !important;
-    border: 1.5px solid var(--input-border);
-    border-radius: 12px; 
+    border: 2px solid var(--input-border); /* เส้นขอบหนา 2px ให้กรอบดูแข็งแรงชัดเจน */
+    border-radius: 12px; /* โค้งมนกำลังดี */
     outline: none;
-    font-size: 0.95rem;
+    font-size: 1rem;
+    font-weight: 400;
     font-family: 'Prompt', sans-serif;
-    transition: var(--transition);
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); /* แอนิเมชันนุ่มนวล */
 }
 
-/* ตัวล็อกสี Placeholder ทุกโหมดการใช้งาน */
+/* เมื่อเอาเมาส์ชี้กรอบข้อความ */
+.admin-panel input:hover, 
+.admin-panel select:hover, 
+.admin-panel textarea:hover,
+.modal-content input:hover {
+    border-color: #cbd5e1;
+}
+body.dark-theme .admin-panel input:hover,
+body.dark-theme .admin-panel select:hover,
+body.dark-theme .admin-panel textarea:hover,
+body.dark-theme .modal-content input:hover {
+    border-color: #475569;
+}
+
+/* เมื่อคลิกเพื่อพิมพ์ (เอฟเฟกต์เรืองแสงและเด้งขึ้น) */
+.admin-panel input:focus, 
+.admin-panel select:focus, 
+.admin-panel textarea:focus,
+.modal-content input:focus {
+    background-color: var(--card-bg); /* ให้สว่างขึ้นมานิดนึงเวลากดพิมพ์ */
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.2); /* วงแหวนสีฟ้าล้อมรอบ */
+    transform: translateY(-2px); /* ลอยเด้งขึ้นมาเบาๆ */
+}
+
+/* สีของตัวอย่างคำในกล่อง (Placeholder) */
 .admin-panel input::placeholder,
-.admin-panel textarea::placeholder {
-    color: #a0aec0 !important;
+.admin-panel textarea::placeholder,
+.modal-content input::placeholder {
+    color: #94a3b8 !important;
     opacity: 0.8 !important;
 }
 body.dark-theme .admin-panel input::placeholder,
-body.dark-theme .admin-panel textarea::placeholder {
+body.dark-theme .admin-panel textarea::placeholder,
+body.dark-theme .modal-content input::placeholder {
     color: #64748b !important;
     opacity: 1 !important;
-}
-
-.admin-panel input:focus, 
-.admin-panel select:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
 }
 
 body.dark-theme .admin-panel input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1);
 }
 
-/* ปุ่มเพิ่มงานใหม่สไตล์โมเดิร์นโค้งมนรับกับฟอร์ม */
+/* ปุ่มเพิ่มงานใหม่ */
 .btn-add {
-    height: 48px; 
+    height: 52px; /* ปรับให้สูงเท่ากล่องพิมพ์ */
     background: linear-gradient(135deg, #2ec4b6 0%, #20b2aa 100%); 
     color: white !important;
     border: none;
@@ -458,7 +485,7 @@ body.dark-theme .admin-panel input[type="date"]::-webkit-calendar-picker-indicat
     width: 100% !important;
 }
 .btn-logout { 
-    background: #fff1f2 !important; /* 🌟 ปรับปุ่มออกจากระบบโหมดสว่างให้นุ่มนวลสบายตา ไม่แดงตะโกน */
+    background: #fff1f2 !important; 
     color: #e11d48 !important; 
     border: 1px solid #ffe4e6 !important;
     padding: 10px 20px !important; 
@@ -478,7 +505,7 @@ body.dark-theme .admin-panel input[type="date"]::-webkit-calendar-picker-indicat
     transform: translateY(-2px) !important;
 }
 body.dark-theme .btn-logout {
-    background: rgba(244, 63, 94, 0.1) !important; /* 🌟 โหมดมืดเป็นสีแดงโปร่งแสงหรูหรา */
+    background: rgba(244, 63, 94, 0.1) !important; 
     border: 1px solid rgba(244, 63, 94, 0.2) !important;
     color: #fb7185 !important;
 }
@@ -512,7 +539,7 @@ body.dark-theme .btn-logout:hover {
 }
 
 .btn-save-announcement {
-    height: 48px; 
+    height: 52px; 
     background: linear-gradient(135deg, #4a90e2 0%, #2563eb 100%);
     color: white !important;
     border: none;
@@ -536,11 +563,11 @@ body.dark-theme .btn-logout:hover {
 }
 
 /* ==========================================================================
-   🔒 7. Modal Popup Window (Login & Edit Modal - ดีไซน์ใหม่ สวย แพง แก้ปัญหาสีกลืน)
+   🔒 7. Modal Popup Window (ป๊อปอัปเข้าสู่ระบบ)
    ========================================================================== */
 .modal {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(15, 23, 42, 0.6); /* 🌟 ปรับเงาข้างหลังให้นุ่มลึกดูโมเดิร์นขึ้น */
+    background: rgba(15, 23, 42, 0.6); /* เงาหลังป๊อปอัปให้นุ่มลึกดูแพง */
     backdrop-filter: blur(4px);
     display: flex; justify-content: center; align-items: center;
     opacity: 0; pointer-events: none; transition: var(--transition); z-index: 1000;
@@ -550,10 +577,10 @@ body.dark-theme .btn-logout:hover {
 .modal-content {
     background: var(--card-bg); 
     color: var(--text-color);
-    padding: 35px; 
-    border-radius: 20px; /* เพิ่มความมนให้หรูหราขึ้น */
+    padding: 35px 30px; 
+    border-radius: 20px; 
     width: 90%; 
-    max-width: 420px;
+    max-width: 400px;
     position: relative; 
     box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15);
     border: 1px solid var(--border-color);
@@ -561,13 +588,13 @@ body.dark-theme .btn-logout:hover {
     overflow-y: auto;
 }
 
-/* 🌟 จัดการหัวข้อโมดอลให้เด่นชัด และมีสีที่ถูกต้องทุกลุค */
 .modal-content h2, 
 .modal-content h3 {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     font-weight: 600;
-    color: var(--dark-blue) !important; /* บังคับใช้สีหัวข้อหลักที่สลับตามโหมด */
+    color: var(--dark-blue) !important; 
     margin-bottom: 5px;
+    text-align: center; /* จัดกึ่งกลางให้สวย */
 }
 
 .close-modal, .close-edit-modal { 
@@ -582,41 +609,28 @@ body.dark-theme .btn-logout:hover {
 }
 .close-modal:hover, .close-edit-modal:hover { opacity: 1; }
 
-.input-group { display: flex; flex-direction: column; gap: 8px; margin-top: 18px; }
+.input-group { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 8px; 
+    margin-top: 20px; 
+}
 
-/* 🌟 แก้ไขสีข้อความ Username / Password ให้ชัดเจน ไม่จมหายไปกับพื้นหลัง */
+/* 🌟 สีตัวหนังสือ Username / Password ไม่จมหายแน่นอน */
 .input-group label { 
-    font-size: 0.9rem; 
+    font-size: 0.95rem; 
     color: var(--text-color) !important; 
     font-weight: 600; 
 }
 
-/* 🌟 ชุบชีวิตช่องพิมพ์ใน Modal ให้หรูหรา สีกราฟิกไม่ลอย ไม่แสบตา */
-.modal-content input {
-    width: 100%;
-    height: 46px;
-    padding: 12px 16px;
-    background-color: var(--input-bg);
-    color: var(--input-text) !important;
-    border: 1.5px solid var(--input-border);
-    border-radius: 10px;
-    outline: none;
-    font-size: 0.95rem;
-    transition: var(--transition);
-}
-.modal-content input:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
-}
-
 .btn-login-submit { 
     width: 100%; 
-    height: 46px;
-    margin-top: 25px; 
+    height: 52px;
+    margin-top: 30px; 
     background: var(--primary-color); 
     color: white; 
     border: none; 
-    border-radius: 10px; 
+    border-radius: 12px; 
     font-weight: 600; 
     font-size: 1rem;
     cursor: pointer; 
@@ -625,10 +639,11 @@ body.dark-theme .btn-logout:hover {
 }
 .btn-login-submit:hover {
     background-color: #357abd;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(74, 144, 226, 0.35);
 }
 
-.error-text { color: #e63946; font-size: 0.85rem; margin-top: 8px; }
+.error-text { color: #e63946; font-size: 0.85rem; margin-top: 8px; text-align: center; }
 .hidden { display: none !important; }
 
 /* ==========================================================================
@@ -660,7 +675,7 @@ body.dark-theme .btn-logout:hover {
 }
 
 /* ==========================================================================
-   📢 ส่วนแสดงผล: ตกแต่งกล่องข้อความประกาศปิดระบบโอนเงิน (สำหรับหน้านักเรียน)
+   📢 ส่วนแสดงผล: ตกแต่งกล่องข้อความประกาศ
    ========================================================================== */
 .announcement-container {
     background-color: var(--announcement-bg);      
