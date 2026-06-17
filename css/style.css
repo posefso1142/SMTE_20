@@ -35,46 +35,30 @@
 
 /* 🌓 ปรับเปลี่ยนสีเมื่อเปิดใช้งาน .dark-theme (Deep Dark Mode สบายตา) */
 body.dark-theme {
-    --bg-color: #0f172a;        /* สีน้ำเงินเข้มลึกแบบโมเดิร์น */
-    --text-color: #94a3b8;      /* สีเทาสว่างอ่านง่ายในที่มืด */
-    --dark-blue: #f8fafc;       /* เปลี่ยนหัวข้อเด่นและข้อความสำคัญเป็นสีขาวนวล */
-    --card-bg: #1e293b;         /* กล่องเนื้อหาเทาเข้ม */
-    --hotbar-bg: rgba(15, 23, 42, 0.85);
-    --border-color: #334155;
-    --table-hover: rgba(51, 65, 85, 0.5);
-    --secondary-color: #334155; 
+    /* 1. สีพื้นหลังแบบ Deep Midnight (ดูนุ่มนวลและทันสมัยกว่าเทาเข้ม) */
+    --bg-color: #0c1220; 
     
-    /* 🌟 สีของกล่องพิมพ์ (Input) โหมดมืด */
-    --input-bg: #0f172a;        /* สีกรมท่าเข้มลึก ให้ดูบุ๋มลงไปมีมิติ */
-    --input-text: #f8fafc;
-    --input-border: #334155;
+    /* 2. สีข้อความที่ซอฟต์ลง ลดอาการล้าสายตา */
+    --text-color: #cbd5e1; 
     
-    /* 🔴 ระบบสีกล่องประกาศสำหรับโหมดมืด */
-    --announcement-bg: rgba(254, 215, 215, 0.04); 
-    --announcement-border: rgba(245, 101, 101, 0.3); 
-    --announcement-text: #fecaca;                  
-    --announcement-icon: #fc8181;                  
+    /* 3. กล่องเนื้อหาที่ให้ความรู้สึกว่ามัน "ยกตัว" ขึ้นมา */
+    --card-bg: #1e293b; 
+    --border-color: rgba(255, 255, 255, 0.05); /* ใช้เส้นขอบบางๆ โปร่งแสง */
     
-    --admin-panel-bg: #1e293b;  
-    --admin-panel-border: #334155;
-    --admin-panel-text: #f8fafc;
+    /* 4. สีส่วนประกอบอื่นๆ */
+    --hotbar-bg: rgba(12, 18, 32, 0.9);
+    --input-bg: #0a0f1d;
+    --secondary-color: #26364d;
+    
+    /* 5. ปรับให้ Admin Panel ดูลอยเด่น */
+    --admin-panel-bg: #162033;
+    --admin-panel-border: rgba(255, 255, 255, 0.08);
 }
 
-/* ==========================================================================
-   🎯 รีเซ็ตค่าพื้นฐานและการตั้งค่าบอดี้
-   ========================================================================== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Prompt', sans-serif;
-}
-
-body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    padding-bottom: 50px;
-    transition: background-color 0.3s, color 0.3s;
+/* เพิ่มเติม: ทำให้ Card มีเอฟเฟกต์ Glassmorphism แบบจางๆ */
+body.dark-theme .content-card {
+    background: linear-gradient(180deg, #1e293b 0%, #162033 100%);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 /* ==========================================================================
