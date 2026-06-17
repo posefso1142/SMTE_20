@@ -2,13 +2,90 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SMTE20 Classroom</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        /* ========================================================
+           🌟 โค้ดส่วนควบคุมระบบ Modal ให้รองรับทุกอุปกรณ์ (Responsive)
+           ======================================================== */
+        
+        /* 1. ตัวพื้นหลังโมดอล (Overlay) */
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 9999; /* อยู่บนสุดของทุกองค์ประกอบ */
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(15, 23, 42, 0.6); /* ปรับพื้นหลังให้ดูโมเดิร์น ซอฟต์สายตา */
+            backdrop-filter: blur(4px); /* เบลอฉากหลังเพิ่มความมิติ */
+            overflow-y: auto; /* เปิดให้สกรอลล์ในระดับพื้นหลังได้ถ้าวอล์เปเปอร์ล้น */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            box-sizing: border-box;
+        }
+
+        /* บังคับปิดทับกลไกแสดงผลเดิมเพื่อให้ flex ทำงานได้เสร็จสรรพ */
+        .modal[style*="display: block"], 
+        .modal[style*="display: flex"] {
+            display: flex !important;
+        }
+
+        /* 2. ตัวกล่องเนื้อหาล็อกอิน (Modal Content) */
+        .modal-content {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 400px; /* จำกัดขนาดความกว้างบน PC */
+            max-height: 90vh; /* จำกัดความสูงไม่ให้เกิน 90% ของหน้าจอ */
+            overflow-y: auto; /* ถ้ายาวล้นหรือคีย์บอร์ดบัง จะเกิดสกรอลล์ด้านในกล่องทันที */
+            border-radius: 16px; /* ขอบมนสวยงามเข้ากับไอแพด */
+            padding: 28px;
+            box-sizing: border-box;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            margin: auto;
+            position: relative;
+            animation: modalFadeIn 0.25s ease-out; /* เพิ่มแอนิเมชันเปิดแบบนุ่มนวล */
+        }
+
+        /* โหมดมืด (Dark Mode) สำหรับธีมสีที่รองรับ */
+        body.dark-mode .modal-content {
+            background-color: #1e293b;
+            color: #f8fafc;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* 3. ปรับสไตล์สำหรับอุปกรณ์ขนาดเล็ก และแท็บเล็ตแนวตั้งเมื่อพิมพ์ (คีย์บอร์ดเด้ง) */
+        @media screen and (max-width: 768px), screen and (max-height: 600px) {
+            .modal {
+                align-items: flex-start; /* ดันกล่องขึ้นไปด้านบนเล็กน้อยเพื่อไม่ให้คีย์บอร์ดทับซ้อน */
+                padding-top: 30px;
+            }
+            .modal-content {
+                max-height: 85vh; /* กระชับความสูงบนมือถือ */
+                padding: 20px;
+            }
+            .modal-content h3 {
+                margin-top: 5px;
+                font-size: 1.3rem;
+            }
+            .modal .input-group {
+                margin-bottom: 12px !important; /* ลดช่องว่างเพื่อประหยัดพื้นที่หน้าจอ */
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -52,8 +129,6 @@
                 <input type="text" id="task-note" placeholder="หมายเหตุ (ถ้ามี)">
                 <button type="submit" class="btn-add"><i class="fa-solid fa-plus"></i> เพิ่มงานใหม่</button>
             </form>
-
-            
 
             <button id="logoutBtn" class="btn-logout" style="margin-top: 15px;">ออกจากระบบแอดมิน</button>
         </section>
