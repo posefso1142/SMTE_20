@@ -734,4 +734,57 @@ body.dark-theme .announcement-container p {
     transition: background-color 0.3s;
 }
 .site-footer p { margin: 4px 0; }
-.dev-credit { font-weight: 500; color: var(--dark-blue) !important; }
+.dev-credit { font-weight: 500; color: var(--dark-blue) !important; }   
+
+/* ==========================================================================
+   💰 [ใหม่ล่าสุด] อัปเกรดไอคอนเงิน (Money Icon) ให้เริ่ดและพรีเมียมขึ้น
+   ========================================================================== */
+.custom-table td:nth-child(5) {
+    font-family: 'Montserrat', sans-serif; /* ฟอนต์ตัวเลขแบบพรีเมียม */
+    font-weight: 700;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px; /* ระยะห่างระหว่างไอคอนและตัวเลข */
+}
+
+/* สร้างไอคอนเงินใหม่เป็นวงกลมเรืองแสงสไตล์ขาวดำ-ทอง */
+.money-icon {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    background-color: #2c3e50; /* สีพื้นหลังไอคอนกรมท่าเข้ม */
+    border: 2px solid #fff; /* เส้นขอบขาว */
+    border-radius: 50%; /* ทรงกลมเป๊ะ */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); /* เรืองแสงขาวเบาๆ */
+    
+    /* เล่นแอนิเมชันชีพจร (Pulse) ดึงสายตา */
+    animation: money-pulse 2s infinite ease-in-out;
+}
+
+@keyframes money-pulse {
+    0% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+    50% { transform: scale(1.1); box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); }
+    100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+}
+
+/* สัญลักษณ์เงิน $ สไตล์ทองเรืองแสง */
+.money-icon::before {
+    content: '$';
+    font-family: 'Prompt', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: #ffb703; /* สีเหลืองทอง */
+    text-shadow: 0 0 5px rgba(255, 183, 3, 0.8); /* เรืองแสงทอง */
+}
+
+/* เล่นเอฟเฟกต์แสงเงาพรีเมียมเมื่อเมาส์วางแถวตาราง */
+.custom-table tbody tr:hover .money-icon {
+    transform: scale(1.2);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 1), 0 0 15px rgba(255, 183, 3, 0.5);
+    transition: all 0.2s ease-in-out;
+}
