@@ -616,3 +616,87 @@ input[type="date"] {
         border-radius: 14px !important;
     }
 }
+/* ========================================================
+   🌟 ULTRA MODERN PREMIUM FOOTER BY THANAPHON
+   ======================================================== */
+.site-footer {
+    background: var(--bg-card);
+    border-top: 1px solid var(--border);
+    padding: 40px 20px 30px;
+    margin-top: 60px;
+    width: 100%;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.01);
+    transition: all 0.4s ease;
+}
+
+.footer-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.footer-branding {
+    text-align: center;
+}
+
+.footer-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+
+.footer-copy {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+/* เส้นคั่นกลางบางๆ สไตล์มินิมอล */
+.footer-divider {
+    width: 100%;
+    max-width: 300px;
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 5px 0;
+}
+
+.footer-credits {
+    text-align: center;
+}
+
+.dev-credit {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.dev-name {
+    font-size: 1rem;
+    color: var(--text-main);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    position: relative;
+}
+
+/* เอฟเฟกต์โหมดมืดสำหรับ Footer */
+body.dark-theme .site-footer {
+    background: #0f172a;
+    border-top: 1px solid #1e293b;
+}
+
+/* ปรับให้กระชับขึ้นบนมือถือ */
+@media (max-width: 768px) {
+    .site-footer {
+        padding: 30px 20px 20px;
+    }
+}
