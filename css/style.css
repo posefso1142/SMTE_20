@@ -283,3 +283,52 @@ span[style*="background-color:#ffe3e3"] {
     .content-card { padding: 25px; border-radius: 20px; }
     .task-form { grid-template-columns: 1fr; } /* มือถือเรียงลงมาข้างล่าง 100% */
 }
+/* ========================================================
+   🛠️ ปรับปรุงสไตล์ Modal และปุ่มแผงควบคุมแอดมิน (Admin Panel Fixes)
+   ======================================================== */
+
+/* 1. แก้ไขข้อความกำกับช่องกรอก (Label) ใน Modal ให้มองเห็นชัดเจน */
+.modal .input-group label,
+#edit-task-form .input-group label {
+    display: block;
+    color: #475569 !important; /* เปลี่ยนจากสีเทาอ่อนเป็นสีเทาเข้ม สบายตาและคมชัด */
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 6px;
+    text-align: left;
+}
+
+/* 2. เปลี่ยนสไตล์ปุ่ม "ออกจากระบบแอดมิน" ให้สวยหรู มินิมอล */
+.btn-logout, #logoutBtn {
+    background-color: transparent !important;
+    color: #ef4444 !important; /* ใช้ตัวหนังสือสีแดงเพื่อบอกสัญลักษณ์การออกจากระบบ */
+    border: 1px solid #fee2e2 !important; /* เส้นขอบสีแดงจางๆ */
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* เอฟเฟกต์เมื่อเอาเมาส์ไปชี้ปุ่มออกจากระบบ (Hover) */
+.btn-logout:hover, #logoutBtn:hover {
+    background-color: #ef4444 !important; /* เปลี่ยนพื้นหลังเป็นสีแดงเด่นชัด */
+    color: #ffffff !important; /* ตัวหนังสือเปลี่ยนเป็นสีขาว */
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+    transform: translateY(-1px);
+}
+
+/* 3. จัดการสีในระบบโหมดมืด (Dark Theme) สำหรับฟอร์มแก้ไขเพิ่มเติม */
+body.dark-theme .modal .input-group label,
+body.dark-theme #edit-task-form .input-group label {
+    color: #94a3b8 !important; /* ในโหมดมืด ปรับให้เป็นสีเทาสว่างเพื่อให้อ่านออก */
+}
+
+body.dark-theme .btn-logout, 
+body.dark-theme #logoutBtn {
+    border-color: rgba(239, 68, 68, 0.3) !important; /* ปรับเส้นขอบปุ่มล็อกเอาต์ให้กลืนกับโหมดมืด */
+}
