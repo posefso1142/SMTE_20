@@ -572,3 +572,48 @@ body.dark-theme #announcement-text {
     text-decoration: none !important;
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2) !important;
 }
+/* ========================================================
+   📱 RESPONSIVE INPUT DATE & LOGOUT BUTTON PERFECT FIX
+   ======================================================== */
+
+/* 1. บังคับล็อกขนาดช่อง Input ทุกชนิดไม่ให้ทะลักออกนอกกรอบ (แก้ปัญหาจอล้นใน iPad/iPhone) */
+.task-form input,
+#admin-panel input,
+input[type="date"] {
+    width: 100% !important;
+    max-width: 100% !important; /* บังคับห้ามขยายเกินพื้นที่ของแถว */
+    box-sizing: border-box !important; /* นับรวม padding และ border ไม่ให้ชิ้นส่วนปูดออก */
+}
+
+/* 2. บล็อกบั๊กขนาดภายในของช่องวันที่บน iOS / iPadOS */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    margin: 0;
+    padding: 0px 4px;
+    cursor: pointer;
+}
+
+/* 3. ยกระดับดีไซน์ปุ่ม "ออกจากระบบแอดมิน" ให้สวยคลีน พรีเมียม ทั้งบน PC และมือถือ */
+.btn-logout, #logoutBtn {
+    background-color: transparent !important;
+    color: #ef4444 !important; /* สีแดง Soft สไตล์มินิมอล */
+    border: 1px solid rgba(239, 68, 68, 0.3) !important; /* เส้นขอบบางๆ ไม่แข็งกระด้าง */
+    padding: 12px 24px !important;
+    border-radius: 14px !important; /* ขอบมนโค้งสวยรับกับการ์ดหลัก */
+    font-size: 0.9rem !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    transition: all 0.25s ease-in-out !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px !important;
+    width: auto !important; /* ขนาดพอดีคำ ไม่ย้วยเต็มกรอบ */
+}
+
+/* เอฟเฟกต์แอนิเมชันเมื่อนำเมาส์ไปชี้หรือกดสัมผัสปุ่มล็อกเอาต์ */
+.btn-logout:hover, #logoutBtn:hover {
+    background-color: #ef4444 !important; /* เปลี่ยนพื้นหลังเป็นสีแดงเด่นชัด */
+    color: #ffffff !important; /* สลับตัวอักษรเป็นสีขาว */
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.25) !important;
+    transform: translateY(-1px);
+}
