@@ -17,7 +17,7 @@
         
         /* 1. ตัวพื้นหลังโมดอล (Overlay) */
         .modal {
-            display: none; 
+            display: none; /* ซ่อนไว้เป็นค่าเริ่มต้น */
             position: fixed;
             z-index: 9999; /* อยู่บนสุดของทุกองค์ประกอบ */
             left: 0;
@@ -27,11 +27,15 @@
             background-color: rgba(15, 23, 42, 0.6); /* ปรับพื้นหลังให้ดูโมเดิร์น ซอฟต์สายตา */
             backdrop-filter: blur(4px); /* เบลอฉากหลังเพิ่มความมิติ */
             overflow-y: auto; /* เปิดให้สกรอลล์ในระดับพื้นหลังได้ถ้าวอล์เปเปอร์ล้น */
-            display: flex;
             align-items: center;
             justify-content: center;
             padding: 16px;
             box-sizing: border-box;
+        }
+
+        /* 🌟 เพิ่มคลาสนี้: เมื่อ JavaScript สั่งเปิด (add class "show") ให้แสดงผลเป็น Flex */
+        .modal.show {
+            display: flex !important;
         }
 
         /* บังคับปิดทับกลไกแสดงผลเดิมเพื่อให้ flex ทำงานได้เสร็จสรรพ */
@@ -223,7 +227,7 @@
                 </button>
             </form>
         </div>
-    </div>
+    }
 
     <footer class="site-footer">
         <div class="footer-container">
