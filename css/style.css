@@ -332,3 +332,118 @@ body.dark-theme .btn-logout,
 body.dark-theme #logoutBtn {
     border-color: rgba(239, 68, 68, 0.3) !important; /* ปรับเส้นขอบปุ่มล็อกเอาต์ให้กลืนกับโหมดมืด */
 }
+/* ========================================================
+   ✨ ULTRA MODERN BUTTONS & ANNOUNCEMENT CARD UPGRADE
+   ======================================================== */
+
+/* --- 1. ปรับแต่งปุ่มแก้ไข (ดินสอ) และปุ่มลบ (ถังขยะ) ในตารางให้สวยพรีเมียม --- */
+.custom-table td button,
+.custom-table td .btn-edit,
+.custom-table td .btn-delete {
+    background: transparent !important;
+    border: none !important;
+    padding: 8px 12px !important;
+    border-radius: 10px !important;
+    font-size: 0.95rem !important;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    margin: 0 4px;
+}
+
+/* ปุ่มแก้ไข (ดินสอสีส้ม/เหลืองแบบซอฟต์) */
+.custom-table td button:first-child,
+.custom-table td .btn-edit {
+    color: #eab308 !important; /* สีส้มอมเหลืองแบบโมเดิร์น */
+    background: rgba(234, 179, 8, 0.1) !important; /* พื้นหลังจางๆ */
+}
+.custom-table td button:first-child:hover,
+.custom-table td .btn-edit:hover {
+    background: #eab308 !important;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+}
+
+/* ปุ่มลบ (ถังขยะสีแดงซอฟต์) */
+.custom-table td button:last-child,
+.custom-table td .btn-delete {
+    color: #ef4444 !important; /* สีแดงพรีเมียม */
+    background: rgba(239, 68, 68, 0.1) !important; /* พื้นหลังจางๆ */
+}
+.custom-table td button:last-child:hover,
+.custom-table td .btn-delete {
+    background: #ef4444 !important;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+}
+
+
+/* --- 2. จัดระเบียบโซนเก็บเงินประจำสัปดาห์ ไม่ให้ปุ่มลอยทับประกาศ --- */
+#money-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 15px; /* จัดช่องไฟให้องค์ประกอบเท่ากัน */
+}
+
+/* รื้อระบบกล่องประกาศใหม่ให้เด่น ชัดเจน ไม่โดนทับ */
+.announcement-container, #announcement-box {
+    width: 100%;
+    max-width: 650px;
+    background: var(--primary-soft) !important;
+    border: 1px solid var(--border) !important;
+    border-left: 5px solid var(--primary) !important; /* เส้นแถบสีเด่นด้านซ้าย */
+    padding: 20px 25px !important;
+    border-radius: 18px !important;
+    margin: 15px 0 !important; /* คุมระยะห่างบนล่าง */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    position: relative !important; /* บังคับจัดระเบียบในโฟลว์หน้าเว็บ */
+}
+
+/* ตัวหนังสือประกาศข้างใน */
+#announcement-text {
+    font-size: 1.05rem !important;
+    font-weight: 500 !important;
+    color: var(--text-main) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    line-height: 1.6;
+}
+
+#announcement-text i {
+    color: var(--primary) !important;
+    font-size: 1.3rem;
+}
+
+/* ดักทางปุ่ม "ไปยังระบบเก็บเงินห้อง" บังคับไม่ให้ลอยเคลื่นที่ซ้อน */
+#money-section .btn-primary,
+.btn-primary[href*="posefso1142"] {
+    position: relative !important; /* ปลดล็อกค่าลอยตัวเก่า */
+    top: 0 !important; /* รีเซ็ตระยะเลื่อน */
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: auto !important; /* ปล่อยให้ขนาดหดพอดีสวยตามตัวอักษร ไม่ย้วยเต็มจอ */
+    padding: 12px 28px !important;
+    margin-top: 10px !important;
+    border-radius: 14px !important;
+    text-decoration: none !important;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25) !important;
+}
+
+/* --- 3. บังคับเปลี่ยนสีในโหมดมืด (Dark Theme) ให้คมชัดร้อยเปอร์เซ็นต์ --- */
+body.dark-theme #announcement-text {
+    color: #f8fafc !important; /* ตัวหนังสือประกาศสีขาวสว่าง */
+}
+body.dark-theme .announcement-container, 
+body.dark-theme #announcement-box {
+    background: rgba(99, 102, 241, 0.15) !important;
+    border-color: #1e293b !important;
+}
