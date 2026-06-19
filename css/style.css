@@ -1,34 +1,37 @@
 /* 
-    SMTE20 Classroom - Modern Minimalist System 
-    Design: Modern, Clean, Responsive 
+    SMTE20 Classroom - Ultimate Responsive UI
+    Design Concept: Premium Minimalist & Smooth Interaction
 */
 
 :root {
-    /* Light Mode Colors */
+    /* ☀️ Light Mode - Clean & Professional */
     --primary: #4f46e5;
     --primary-hover: #4338ca;
     --bg-body: #f8fafc;
     --bg-card: #ffffff;
-    --text-main: #1e293b;
+    --bg-input: #ffffff;
+    --text-main: #0f172a;
     --text-muted: #64748b;
     --border: #e2e8f0;
     --nav-bg: rgba(255, 255, 255, 0.8);
-    --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
-    --radius: 16px;
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --radius: 18px;
 }
 
-/* Dark Mode Colors - เชื่อมกับ JS .dark-theme */
+/* 🌑 Premium Dark Mode - Deep Slate Blue */
 body.dark-theme {
-    --bg-body: #0f172a;
-    --bg-card: #1e293b;
-    --text-main: #f1f5f9;
+    --bg-body: #0b0f1a;      /* พื้นหลังเข้มลึก */
+    --bg-card: #161b2c;      /* การ์ดสีน้ำเงินเทาเข้ม */
+    --bg-input: #1f2937;
+    --text-main: #f8fafc;
     --text-muted: #94a3b8;
-    --border: #334155;
-    --nav-bg: rgba(15, 23, 42, 0.8);
-    --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+    --border: #2d3748;
+    --nav-bg: rgba(11, 15, 26, 0.85);
+    --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+    --primary: #6366f1;      /* สีหลักที่สว่างขึ้นเล็กน้อยในโหมดมืด */
 }
 
+/* Base Settings */
 * {
     margin: 0;
     padding: 0;
@@ -36,67 +39,38 @@ body.dark-theme {
     font-family: 'Prompt', sans-serif;
 }
 
-html {
-    scroll-behavior: smooth;
-}
-
 body {
     background-color: var(--bg-body);
     color: var(--text-main);
-    line-height: 1.6;
-    transition: var(--transition);
+    transition: background-color 0.4s ease, color 0.4s ease;
     padding-top: 80px;
+    -webkit-font-smoothing: antialiased;
 }
 
 /* =========================================
-   Navigation (Hotbar) - Modern Glassmorphism
+   1. Hotbar (Navigation)
    ========================================= */
 .hotbar {
     background-color: var(--nav-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     height: 70px;
     width: 100%;
     position: fixed;
     top: 0;
     z-index: 1000;
+    border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
-    border-bottom: 1px solid var(--border);
-    transition: var(--transition);
 }
 
 .hotbar-container {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
     padding: 0 20px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-}
-
-.shortcut-menu {
-    display: flex;
-    gap: 8px;
-}
-
-.shortcut-item {
-    text-decoration: none;
-    color: var(--text-main);
-    font-weight: 500;
-    font-size: 0.95rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    border-radius: 12px;
-    transition: var(--transition);
-}
-
-.shortcut-item:hover {
-    background-color: var(--primary);
-    color: white;
 }
 
 .admin-avatar-btn, .theme-toggle-btn {
@@ -107,34 +81,46 @@ body {
     height: 42px;
     border-radius: 12px;
     cursor: pointer;
-    transition: var(--transition);
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
-    justify-content: center;
     align-items: center;
-    box-shadow: var(--shadow);
+    justify-content: center;
+    font-size: 1.1rem;
 }
 
-.admin-avatar-btn:hover { transform: translateY(-2px); border-color: var(--primary); color: var(--primary); }
-.theme-toggle-btn:hover { transform: rotate(15deg); color: #fbbf24; }
+.admin-avatar-btn:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
+.theme-toggle-btn:hover { color: #fbbf24; background: rgba(251, 191, 36, 0.1); transform: rotate(15deg); }
+
+.shortcut-menu { display: flex; gap: 12px; }
+.shortcut-item {
+    text-decoration: none;
+    color: var(--text-main);
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 10px 18px;
+    border-radius: 12px;
+    transition: 0.3s;
+}
+.shortcut-item:hover { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
 
 /* =========================================
-   Banner - 1200x400 Optimized
+   2. Banner - Perfect 3:1 Ratio
    ========================================= */
 .banner-container {
-    max-width: 1200px;
-    margin: 10px auto 30px;
-    padding: 0 20px;
+    max-width: 1100px;
+    margin: 10px auto 35px;
+    padding: 0 15px;
 }
 
 .banner-box {
     width: 100%;
-    aspect-ratio: 3 / 1; /* รักษาสัดส่วน 1200x400 */
-    max-height: 400px;
-    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    aspect-ratio: 1200 / 400; /* รักษาสัดส่วน 3:1 */
+    background: #cbd5e1;
     border-radius: 24px;
     overflow: hidden;
-    position: relative;
     box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    position: relative;
 }
 
 .banner-box img {
@@ -145,48 +131,45 @@ body {
 }
 
 /* =========================================
-   Main Content Cards
+   3. Main Content & Hierarchy
    ========================================= */
 .main-wrapper {
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 15px;
 }
 
 .content-card {
     background: var(--bg-card);
     border-radius: var(--radius);
-    padding: 32px;
+    padding: 35px;
     margin-bottom: 30px;
-    box-shadow: var(--shadow);
     border: 1px solid var(--border);
-    transition: var(--transition);
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease;
 }
 
 .card-header {
     display: flex;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
+    gap: 15px;
+    margin-bottom: 25px;
 }
 
-.card-header h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    letter-spacing: -0.5px;
+.card-header h2 { 
+    font-size: 1.6rem; 
+    font-weight: 600; 
+    letter-spacing: -0.02em;
 }
 
-.card-header i {
-    font-size: 1.5rem;
-    color: var(--primary);
-}
+.card-header i { color: var(--primary); font-size: 1.7rem; }
 
 /* =========================================
-   Table Design (Modern Minimal)
+   4. Table Design (Minimalist)
    ========================================= */
 .table-responsive {
     overflow-x: auto;
-    border-radius: 12px;
+    border-radius: 14px;
     border: 1px solid var(--border);
 }
 
@@ -197,79 +180,72 @@ body {
 }
 
 .custom-table th {
-    background-color: var(--bg-body);
-    color: var(--text-muted);
     text-align: left;
-    padding: 16px;
-    font-size: 0.85rem;
+    padding: 18px;
+    background: var(--bg-body);
+    font-size: 0.8rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    border-bottom: 2px solid var(--border);
 }
 
 .custom-table td {
-    padding: 18px 16px;
+    padding: 18px;
     border-bottom: 1px solid var(--border);
     font-size: 0.95rem;
 }
 
-.custom-table tr:last-child td { border-bottom: none; }
+.custom-table tr:hover { background-color: rgba(79, 70, 229, 0.03); }
 
-.custom-table tr:hover { background-color: rgba(79, 70, 229, 0.02); }
-
-/* Status Badge in Table */
+/* Badge สำหรับวันส่งงาน */
 .date-badge {
-    background: #fee2e2;
+    background-color: rgba(239, 68, 68, 0.1);
     color: #ef4444;
-    padding: 4px 12px;
+    padding: 5px 14px;
     border-radius: 99px;
-    font-size: 0.85rem;
     font-weight: 500;
+    font-size: 0.85rem;
 }
-
-/* Edit/Delete Buttons */
-.btn-edit, .btn-delete {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    transition: var(--transition);
-    margin-right: 5px;
-}
-
-.btn-edit { background: #fef3c7; color: #d97706; }
-.btn-edit:hover { background: #fbbf24; color: white; }
-
-.btn-delete { background: #fee2e2; color: #ef4444; }
-.btn-delete:hover { background: #ef4444; color: white; }
 
 /* =========================================
-   Admin Panel
+   5. Admin Panel (Fixed Hiding)
    ========================================= */
+/* แก้ไขให้ปิดสนิทเมื่อไม่มีสิทธิ์ */
+.admin-panel.hidden {
+    display: none !important;
+}
+
 .admin-panel {
-    background: rgba(79, 70, 229, 0.05);
+    background: rgba(79, 70, 229, 0.08);
     border: 2px dashed var(--primary);
     border-radius: var(--radius);
     padding: 30px;
     margin-bottom: 30px;
+    animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .task-form {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
     margin-top: 20px;
 }
 
 input {
-    background: var(--bg-card);
+    background: var(--bg-input);
     border: 1px solid var(--border);
     color: var(--text-main);
-    padding: 12px 16px;
+    padding: 12px 18px;
     border-radius: 12px;
     outline: none;
-    transition: var(--transition);
+    transition: 0.2s;
     width: 100%;
 }
 
@@ -281,36 +257,22 @@ input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(79, 70, 2
     padding: 12px 24px;
     border: none;
     border-radius: 12px;
-    font-weight: 600;
     cursor: pointer;
-    transition: var(--transition);
+    font-weight: 600;
+    transition: 0.3s;
 }
 
-.btn-add:hover, .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3); }
+.btn-add:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3); }
 
 /* =========================================
-   Announcement
-   ========================================= */
-.announcement-container {
-    background: #fffbeb;
-    border-left: 4px solid #f59e0b;
-    border-radius: 12px;
-    padding: 20px;
-    margin: 24px 0;
-    color: #92400e;
-}
-
-body.dark-theme .announcement-container { background: rgba(245, 158, 11, 0.1); color: #fbbf24; }
-
-/* =========================================
-   Modals (Modern Centered)
+   6. Modal System
    ========================================= */
 .modal {
     display: none;
     position: fixed;
     inset: 0;
     z-index: 2000;
-    background: rgba(15, 23, 42, 0.7);
+    background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(8px);
     align-items: center;
     justify-content: center;
@@ -322,32 +284,27 @@ body.dark-theme .announcement-container { background: rgba(245, 158, 11, 0.1); c
 .modal-content {
     background: var(--bg-card);
     padding: 40px;
-    border-radius: 24px;
+    border-radius: 28px;
     width: 100%;
     max-width: 420px;
     position: relative;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    animation: modalSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes modalSlide {
-    from { opacity: 0; transform: translateY(30px) scale(0.95); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
 }
 
 .close-modal, .close-edit-modal {
     position: absolute;
-    right: 24px; top: 20px;
-    font-size: 1.5rem;
+    right: 25px; top: 20px;
     cursor: pointer;
     color: var(--text-muted);
+    font-size: 1.5rem;
+    transition: 0.2s;
 }
 
-.input-group { margin-bottom: 20px; }
-.input-group label { display: block; margin-bottom: 8px; font-size: 0.9rem; font-weight: 500; }
+.close-modal:hover { color: var(--text-main); }
 
 /* =========================================
-   Footer
+   7. Footer
    ========================================= */
 .site-footer {
     padding: 60px 20px;
@@ -357,17 +314,14 @@ body.dark-theme .announcement-container { background: rgba(245, 158, 11, 0.1); c
     border-top: 1px solid var(--border);
 }
 
-/* Utility */
+/* Helpers */
 .hidden { display: none !important; }
 .text-center { text-align: center; }
 
-/* =========================================
-   Responsive Fixes
-   ========================================= */
+/* Responsive */
 @media (max-width: 768px) {
     .shortcut-item span { display: none; }
-    .banner-box { border-radius: 16px; }
-    .content-card { padding: 20px; }
+    .banner-box { aspect-ratio: 2 / 1; border-radius: 18px; }
+    .content-card { padding: 25px 20px; }
     .task-form { grid-template-columns: 1fr; }
-    .hotbar-container { padding: 0 15px; }
 }
