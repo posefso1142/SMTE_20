@@ -617,16 +617,16 @@ input[type="date"] {
     }
 }
 /* ========================================================
-   🌟 ULTRA MODERN PREMIUM FOOTER BY THANAPHON
+   🌟 FORCE FOOTER TO BOTTOM (บังคับอยู่ล่างสุด ไม่หายแน่นอน)
    ======================================================== */
-.site-footer {
-    background: var(--bg-card);
-    border-top: 1px solid var(--border);
-    padding: 40px 20px 30px;
-    margin-top: 60px;
-    width: 100%;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.01);
-    transition: all 0.4s ease;
+.main-footer {
+    background: var(--bg-card) !important;
+    border-top: 1px solid var(--border) !important;
+    padding: 40px 20px 30px !important;
+    margin-top: 80px !important; /* เพิ่มระยะห่างจากเนื้อหาด้านบน */
+    width: 100% !important;
+    clear: both !important; /* ล้างค่าลอยตัวของชิ้นส่วนอื่น */
+    display: block !important; /* บังคับให้แสดงผลเป็นกล่อง */
 }
 
 .footer-container {
@@ -635,11 +635,7 @@ input[type="date"] {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
-}
-
-.footer-branding {
-    text-align: center;
+    gap: 15px;
 }
 
 .footer-logo {
@@ -648,55 +644,37 @@ input[type="date"] {
     gap: 8px;
     font-size: 1.1rem;
     font-weight: 600;
-    color: var(--primary);
-    margin-bottom: 8px;
+    color: #6366f1; /* สีฟ้านีออนโมเดิร์น */
+    margin-bottom: 6px;
 }
 
 .footer-copy {
     font-size: 0.85rem;
-    color: var(--text-muted);
-    font-weight: 400;
+    color: #94a3b8;
 }
 
-/* เส้นคั่นกลางบางๆ สไตล์มินิมอล */
 .footer-divider {
     width: 100%;
-    max-width: 300px;
+    max-width: 200px;
     border: 0;
     border-top: 1px solid var(--border);
     margin: 5px 0;
-}
-
-.footer-credits {
-    text-align: center;
+    opacity: 0.5;
 }
 
 .dev-credit {
     font-size: 0.85rem;
-    color: var(--text-muted);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
+    color: #94a3b8;
+    text-align: center;
 }
 
 .dev-name {
-    font-size: 1rem;
     color: var(--text-main);
     font-weight: 600;
-    letter-spacing: 0.5px;
-    position: relative;
 }
 
-/* เอฟเฟกต์โหมดมืดสำหรับ Footer */
-body.dark-theme .site-footer {
-    background: #0f172a;
-    border-top: 1px solid #1e293b;
-}
-
-/* ปรับให้กระชับขึ้นบนมือถือ */
-@media (max-width: 768px) {
-    .site-footer {
-        padding: 30px 20px 20px;
-    }
+/* เอฟเฟกต์โหมดมืด */
+body.dark-theme .main-footer {
+    background: #0f172a !important; /* สีน้ำเงินเข้มพรีเมียม */
+    border-top: 1px solid #1e293b !important;
 }
