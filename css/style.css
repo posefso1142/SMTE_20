@@ -447,3 +447,128 @@ body.dark-theme #announcement-box {
     background: rgba(99, 102, 241, 0.15) !important;
     border-color: #1e293b !important;
 }
+/* ========================================================
+   ✨ MODERN LIGHT MODAL & CLEAN UI FIX (เน้นพื้นขาว อักษรชัด)
+   ======================================================== */
+
+/* --- 1. จัดการหน้าต่างป๊อปอัปทั้งหมด (Login & Edit Modal) ให้เป็นสีขาวสวยคมชัด --- */
+.modal-content, 
+body.dark-theme .modal-content {
+    background-color: #ffffff !important; /* บังคับพื้นหลังเป็นสีขาวเคลียร์ ไม่เปลี่ยนเป็นสีมืด */
+    border-radius: 24px !important; /* ขอบมนสวยสไตล์ Apple */
+    padding: 35px !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* หัวข้อใหญ่ด้านบนสุด (เช่น แอดมินเข้าสู่ระบบ, แก้ไขข้อมูลงาน) */
+.modal-content h3, 
+body.dark-theme .modal-content h3 {
+    color: #0f172a !important; /* บังคับเป็นสีเข้มชัดเจน ไม่กลืนหาย */
+    font-size: 1.4rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 20px !important;
+    text-align: left !important;
+}
+
+/* ข้อความกำกับช่องพิมพ์ (Label เช่น Username, Password, ชื่องาน) */
+.modal .input-group label,
+#edit-task-form .input-group label,
+body.dark-theme .modal .input-group label,
+body.dark-theme #edit-task-form .input-group label {
+    display: block !important;
+    color: #475569 !important; /* สีเทาเข้ม สบายตาและคมชัด */
+    font-size: 0.9rem !important;
+    font-weight: 500 !important;
+    margin-bottom: 6px !important;
+    text-align: left !important;
+}
+
+/* ช่องสำหรับกรอกข้อมูลภายในป๊อปอัป */
+.modal .input-group input,
+body.dark-theme .modal .input-group input {
+    background-color: #f8fafc !important; /* พื้นหลังช่องกรอกสีนวลสะอาด */
+    border: 1px solid #cbd5e1 !important; /* เส้นขอบชัดเจน */
+    color: #0f172a !important; /* ตัวหนังสือสีเข้มอ่านง่าย */
+    border-radius: 12px !important;
+    padding: 12px 16px !important;
+    font-size: 0.95rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* โฟกัสเมื่อคลิกพิมพ์ข้อความ */
+.modal .input-group input:focus {
+    border-color: var(--primary) !important;
+    background-color: #ffffff !important;
+    box-shadow: 0 0 0 4px var(--primary-soft) !important;
+}
+
+/* --- 2. จัดบาลานซ์ปุ่มกดภายในป๊อปอัปให้เต็มความกว้าง สมมาตร สวยงาม --- */
+.btn-login-submit, 
+#submitLogin,
+#edit-task-form button[type="submit"] {
+    width: 100% !important; /* ยืดปุ่มให้กว้างเท่าช่องกรอก */
+    padding: 14px !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    border-radius: 12px !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 15px !important;
+    border: none !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+
+/* --- 3. แก้ไขระบบกล่องประกาศประจำสัปดาห์ ไม่ให้ปุ่มลอยขึ้นมาทับซ้อน --- */
+#money-section {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+/* กล่องข้อความประกาศประจำสัปดาห์ */
+.announcement-container, 
+#announcement-box,
+body.dark-theme .announcement-container,
+body.dark-theme #announcement-box {
+    width: 100% !important;
+    max-width: 650px !important;
+    background: var(--primary-soft) !important;
+    border: 1px solid var(--border) !important;
+    border-left: 5px solid var(--primary) !important; /* เส้นแท็บหนาด้านซ้าย */
+    padding: 18px 22px !important;
+    border-radius: 16px !important;
+    margin: 15px 0 !important;
+    position: relative !important; /* บังคับให้อยู่ในแถวปกติ ไม่ให้สิ่งอื่นลอยมาทับ */
+}
+
+/* ตัวหนังสือในกล่องประกาศ */
+#announcement-text,
+body.dark-theme #announcement-text {
+    font-size: 1.05rem !important;
+    font-weight: 500 !important;
+    color: var(--text-main) !important; /* เปลี่ยนตามโหมดหลักอัตโนมัติ */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+}
+
+/* จัดระเบียบปุ่ม "ไปยังระบบเก็บเงินห้อง" ไม่ให้หลุดตำแหน่ง */
+#money-section .btn-primary,
+.btn-primary[href*="posefso1142"] {
+    position: relative !important; /* ปลดล็อกไม่ให้ปุ่มลอยขึ้นข้างบน */
+    top: 0 !important; 
+    display: inline-flex !important;
+    width: auto !important; /* ขนาดปุ่มพอดีตัวอักษร ไม่ย้วย */
+    padding: 12px 28px !important;
+    border-radius: 14px !important;
+    text-decoration: none !important;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2) !important;
+}
