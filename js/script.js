@@ -1,11 +1,7 @@
 // ==========================================================================
-// 📢 ข้อความประกาศประจำสัปดาห์
+// 📢 ข้อความประกาศประจำสัปดาห์ & ระบบแอดมิน
 // ==========================================================================
-let CURRENT_ANNOUNCEMENT = "ปิดระบบการโอนเงิน";
-
-if (localStorage.getItem('savedAnnouncement')) {
-    CURRENT_ANNOUNCEMENT = localStorage.getItem('savedAnnouncement');
-}
+let CURRENT_ANNOUNCEMENT = "ปิดระบบโอนเงิน เทอม 1 ปีการศึกษา 2569";
 
 // ข้อมูล Admin
 const ADMIN_USER = "ADMIN_SMTE20";
@@ -31,11 +27,43 @@ const taskList = document.getElementById('task-list');
 let isAdmin = sessionStorage.getItem('isAdmin') === 'true';
 let tasks = [];
 
-// ฟังก์ชันเปิด/ปิด Modal Login
+// ==========================================
+// 🎨 ฟังก์ชัน SweetAlert2 Custom Notification
+// ==========================================
+function showSuccessToast(title, text = '') {
+    Swal.fire({
+        icon: 'success',
+        title: title,
+        text: text,
+        showConfirmButton: false,
+        timer: 1800,
+        timerProgressBar: true,
+        customClass: {
+            popup: 'swal2-toast-custom'
+        }
+    });
+}
+
+function showErrorToast(title, text = '') {
+    Swal.fire({
+        icon: 'error',
+        title: title,
+        text: text,
+        confirmButtonText: 'ตกลง',
+        confirmButtonColor: '#ef4444'
+    });
+}
+
+// เปิด/ปิด Modal Login
 if (loginBtn) {
     loginBtn.addEventListener('click', () => {
         if (isAdmin) {
-            alert('คุณเข้าสู่ระบบแอดมินอยู่แล้วครับ!');
+            Swal.fire({
+                icon: 'info',
+                title: 'เข้าสู่ระบบอยู่แล้ว',
+                text: 'คุณอยู่ในระบบผู้ดูแลระบบเรียบร้อยแล้วครับ',
+                confirmButtonColor: '#3b82f6'
+            });
         } else {
             if (loginModal) loginModal.classList.add('show');
         }
@@ -66,7 +94,18 @@ if (submitLogin) {
             sessionStorage.setItem('isAdmin', 'true');
             if (loginModal) loginModal.classList.remove('show');
             clearLoginForm();
-            updateUI();
+            
+            // ป็อปอัปยินดีต้อนรับแอดมิน แบบในรูป
+            Swal.fire({
+                icon: 'success',
+                title: 'เข้าสู่ระบบสำเร็จ!',
+                text: 'ยินดีต้อนรับ! กำลังพาคุณไปยังหน้าควบคุม...',
+                showConfirmButton: false,
+                timer: 1800,
+                timerProgressBar: true
+            }).then(() => {
+                updateUI();
+            });
         } else {
             if (loginError) loginError.classList.remove('hidden');
         }
@@ -76,9 +115,24 @@ if (submitLogin) {
 // ออกจากระบบ แอดมิน
 if (logoutBtn) {
     logoutBtn.addEventListener('click', () => {
-        isAdmin = false;
-        sessionStorage.removeItem('isAdmin');
-        updateUI();
+        Swal.fire({
+            title: 'ออกจากระบบ?',
+            text: "คุณต้องการออกจากระบบแอดมินใช่หรือไม่",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: 'ใช่, ออกจากระบบ',
+            cancelButtonText: 'ยกเลิก'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                isAdmin = false;
+                sessionStorage.removeItem('isAdmin');
+                
+                showSuccessToast('ออกจากระบบสำเร็จ!', 'คืนค่าสิทธิ์ผู้ใช้งานทั่วไป');
+                updateUI();
+            }
+        });
     });
 }
 
@@ -87,18 +141,16 @@ function updateUI() {
     if (isAdmin) {
         if (adminPanel) adminPanel.classList.remove('hidden');
         document.querySelectorAll('.admin-action-col').forEach(el => el.classList.remove('hidden'));
-        
-        const editAnnounceInput = document.getElementById('edit-announcement-input');
-        if (editAnnounceInput) editAnnounceInput.value = CURRENT_ANNOUNCEMENT;
     } else {
         if (adminPanel) adminPanel.classList.add('hidden');
         document.querySelectorAll('.admin-action-col').forEach(el => el.classList.add('hidden'));
     }
     fetchTasksFromSheets(); 
+    fetchAnnouncement();
 }
 
 // ==========================================
-// ฟังก์ชัน 1: ดึงข้อมูลจาก Google Sheets (ตารางงาน)
+// ฟังก์ชัน 1: ดึงข้อมูลตารางงานจาก Google Sheets
 // ==========================================
 function fetchTasksFromSheets() {
     if (!taskList) return;
@@ -108,7 +160,12 @@ function fetchTasksFromSheets() {
     fetch(SCRIPT_URL)
         .then(res => res.json())
         .then(data => {
-            tasks = data; 
+            // ถ้าระบบส่งข้อมูลรวมแบบ Object
+            if (data.tasks) {
+                tasks = data.tasks;
+            } else if (Array.isArray(data)) {
+                tasks = data;
+            }
             renderTasks(); 
         })
         .catch(err => {
@@ -155,7 +212,7 @@ function renderTasks() {
 
         tr.innerHTML = `
             <td>${index + 1}</td>
-            <td style="font-weight:500; color:var(--dark-blue);">${name}</td>
+            <td style="font-weight:500;">${name}</td>
             <td>${desc}</td>
             <td><span style="background-color:#ffe3e3; color:#e63946; padding:4px 10px; border-radius:20px; font-size:0.85rem; white-space: nowrap; display: inline-block; font-weight: 500;">${thaiDate}</span></td>
             <td style="font-style: italic; color:#718096;">${note || '-'}</td>
@@ -202,16 +259,15 @@ if (taskForm) {
             body: JSON.stringify(newTask)
         })
         .then(() => {
-            alert('➕ เพิ่มงานใหม่ลง Google Sheets สำเร็จ!');
+            showSuccessToast('เพิ่มงานสำเร็จ!', 'บันทึกข้อมูลงานใหม่ลงตารางเรียบร้อยแล้ว');
             taskForm.reset();
-            // หน่วงเวลา 1.5 วินาที เพื่อรอให้ Google Sheets บันทึกข้อมูลเสร็จเรียบร้อย
             setTimeout(() => {
                 fetchTasksFromSheets(); 
-            }, 1500);
+            }, 1200);
         })
         .catch(err => {
             console.error("Error adding task:", err);
-            alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล");
+            showErrorToast('เกิดข้อผิดพลาด', 'ไม่สามารถเพิ่มข้อมูลได้ กรุณาลองใหม่อีกครั้ง');
         })
         .finally(() => {
             if (submitBtn) {
@@ -228,10 +284,96 @@ if (taskForm) {
 window.deleteTask = function(idToDelete) {
     if (!isAdmin) return;
     
-    if (confirm('⚠️ คุณแน่ใจหรือไม่ที่จะลบงานนี้ออกจาก Google Sheets อย่างถาวร?')) {
+    Swal.fire({
+        title: 'ยืนยันการลบงาน?',
+        text: "คุณแน่ใจหรือไม่ที่จะลบงานนี้ออกจากระบบอย่างถาวร",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'ใช่, ลบงานนี้',
+        cancelButtonText: 'ยกเลิก'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const dataToSend = {
+                action: "delete",
+                id: idToDelete
+            };
+
+            fetch(SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(dataToSend)
+            })
+            .then(() => {
+                showSuccessToast('ลบงานสำเร็จ!', 'ลบรายการงานออกจากตารางเรียบร้อย');
+                setTimeout(() => {
+                    fetchTasksFromSheets(); 
+                }, 1200);
+            })
+            .catch(err => {
+                console.error("Error deleting task:", err);
+                showErrorToast('เกิดข้อผิดพลาด', 'ไม่สามารถลบงานได้');
+            });
+        }
+    });
+};
+
+// ==========================================
+// 📢 ระบบแสดงผลและจัดการประกาศประจำสัปดาห์ (Real-time Google Sheets)
+// ==========================================
+const announcementBox = document.getElementById('announcement-box'); 
+const saveAnnouncementBtn = document.getElementById('saveAnnouncementBtn');
+
+// ดึงประกาศจาก Google Sheets
+function fetchAnnouncement() {
+    if (!announcementBox) return;
+
+    fetch(`${SCRIPT_URL}?action=getAnnouncement`)
+        .then(res => res.json())
+        .then(data => {
+            if (data && data.announcement) {
+                CURRENT_ANNOUNCEMENT = data.announcement;
+            }
+            renderAnnouncement();
+        })
+        .catch(() => {
+            // ถ้าดึงจากเน็ตไม่ได้ ให้ดึงจาก LocalStorage สำรอง
+            if (localStorage.getItem('savedAnnouncement')) {
+                CURRENT_ANNOUNCEMENT = localStorage.getItem('savedAnnouncement');
+            }
+            renderAnnouncement();
+        });
+}
+
+function renderAnnouncement() {
+    if (!announcementBox) return;
+    announcementBox.innerHTML = `<p style="margin:0;"><i class="fa-solid fa-bullhorn" style="color:#3b82f6;"></i> <strong>ประกาศสัปดาห์นี้:</strong> ${CURRENT_ANNOUNCEMENT}</p>`;
+    
+    const editAnnounceInput = document.getElementById('edit-announcement-input');
+    if (editAnnounceInput && isAdmin) {
+        editAnnounceInput.value = CURRENT_ANNOUNCEMENT;
+    }
+}
+
+// บันทึกประกาศลง Google Sheets
+if (saveAnnouncementBtn) {
+    saveAnnouncementBtn.addEventListener('click', () => {
+        const editInput = document.getElementById('edit-announcement-input');
+        const newAnnounce = editInput ? editInput.value.trim() : '';
+        
+        if (newAnnounce === '') {
+            showErrorToast('กรุณากรอกข้อความ', 'ข้อความประกาศต้องไม่เป็นค่าว่าง');
+            return;
+        }
+
+        saveAnnouncementBtn.disabled = true;
+        saveAnnouncementBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> บันทึก...`;
+
         const dataToSend = {
-            action: "delete",
-            id: idToDelete
+            action: "updateAnnouncement",
+            announcement: newAnnounce
         };
 
         fetch(SCRIPT_URL, {
@@ -241,74 +383,24 @@ window.deleteTask = function(idToDelete) {
             body: JSON.stringify(dataToSend)
         })
         .then(() => {
-            alert('🗑️ ลบงานออกจากระบบสำเร็จ!');
-            setTimeout(() => {
-                fetchTasksFromSheets(); 
-            }, 1500);
+            CURRENT_ANNOUNCEMENT = newAnnounce;
+            localStorage.setItem('savedAnnouncement', newAnnounce);
+            renderAnnouncement();
+            showSuccessToast('อัปเดตประกาศสำเร็จ!', 'ทุกคนในเว็บจะเห็นข้อความใหม่นี้ทันที');
         })
         .catch(err => {
-            console.error("Error deleting task:", err);
-            alert("เกิดข้อผิดพลาดในการลบข้อมูล");
+            console.error("Error saving announcement:", err);
+            showErrorToast('เกิดข้อผิดพลาด', 'ไม่สามารถอัปเดตประกาศได้');
+        })
+        .finally(() => {
+            saveAnnouncementBtn.disabled = false;
+            saveAnnouncementBtn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> บันทึกประกาศ`;
         });
-    }
-};
-
-// รันฟังก์ชันตรวจสอบเมื่อเปิดหน้าเว็บครั้งแรก
-updateUI();
-
-// ==========================================
-// 📢 ระบบแสดงผลและจัดการบันทึกประกาศ
-// ==========================================
-const announcementBox = document.getElementById('announcement-box'); 
-const saveAnnouncementBtn = document.getElementById('saveAnnouncementBtn');
-
-function loadAnnouncement() {
-    if (!announcementBox) return;
-    announcementBox.innerHTML = `<p><i class="fa-solid fa-bullhorn"></i> ประกาศสัปดาห์นี้: ${CURRENT_ANNOUNCEMENT}</p>`;
-}
-
-if (saveAnnouncementBtn) {
-    saveAnnouncementBtn.addEventListener('click', () => {
-        const editInput = document.getElementById('edit-announcement-input');
-        const newAnnounce = editInput ? editInput.value.trim() : '';
-        if (newAnnounce === '') {
-            alert('กรุณากรอกข้อความประกาศก่อนบันทึก!');
-            return;
-        }
-        CURRENT_ANNOUNCEMENT = newAnnounce;
-        localStorage.setItem('savedAnnouncement', newAnnounce);
-        loadAnnouncement();
-        alert('💾 บันทึกและเปลี่ยนประกาศประจำสัปดาห์สำเร็จ!');
-    });
-}
-
-loadAnnouncement();
-
-// ==========================================
-// 🌓 ระบบควบคุมการสลับโหมดมืด
-// ==========================================
-const themeToggleBtn = document.getElementById('themeToggleBtn');
-
-if (localStorage.getItem('theme') === 'dark') {
-    document.body.classList.add('dark-theme');
-    if (themeToggleBtn && themeToggleBtn.querySelector('i')) {
-        themeToggleBtn.querySelector('i').className = 'fa-solid fa-sun';
-    }
-}
-
-if (themeToggleBtn) {
-    themeToggleBtn.addEventListener('click', () => {
-        document.body.classList.toggle('dark-theme');
-        const isDark = document.body.classList.contains('dark-theme');
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        if (themeToggleBtn.querySelector('i')) {
-            themeToggleBtn.querySelector('i').className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-        }
     });
 }
 
 // ==========================================
-// ✏️ ระบบเปิด/ปิดและบันทึกหน้าต่างแก้ไขข้อมูลงาน
+// ✏️ ระบบเปิด/ปิดและแก้ไขข้อมูลงาน
 // ==========================================
 const editModal = document.getElementById('editModal');
 const closeEditModal = document.querySelector('.close-edit-modal');
@@ -366,15 +458,15 @@ if (editTaskForm) {
             body: JSON.stringify(updatedTask)
         })
         .then(() => {
-            alert('📝 แก้ไขข้อมูลงานใน Google Sheets สำเร็จ!');
             if (editModal) editModal.classList.remove('show');
+            showSuccessToast('แก้ไขงานสำเร็จ!', 'อัปเดตข้อมูลลงตารางเรียบร้อยแล้ว');
             setTimeout(() => {
                 fetchTasksFromSheets(); 
-            }, 1500);
+            }, 1200);
         })
         .catch(err => {
             console.error("Error editing task:", err);
-            alert("เกิดข้อผิดพลาดในการแก้ไขข้อมูล");
+            showErrorToast('เกิดข้อผิดพลาด', 'ไม่สามารถบันทึกการแก้ไขได้');
         })
         .finally(() => {
             if (submitBtn) {
@@ -384,3 +476,31 @@ if (editTaskForm) {
         });
     });
 }
+
+// ==========================================
+// 🌓 ระบบควบคุมการสลับโหมดมืด
+// ==========================================
+const themeToggleBtn = document.getElementById('themeToggleBtn');
+
+if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark-theme');
+    document.body.classList.add('dark-mode');
+    if (themeToggleBtn && themeToggleBtn.querySelector('i')) {
+        themeToggleBtn.querySelector('i').className = 'fa-solid fa-sun';
+    }
+}
+
+if (themeToggleBtn) {
+    themeToggleBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-theme');
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-theme');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        if (themeToggleBtn.querySelector('i')) {
+            themeToggleBtn.querySelector('i').className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        }
+    });
+}
+
+// รันระบบเริ่มต้น
+updateUI();
