@@ -11,7 +11,7 @@ const ADMIN_PASS = "SMTE";
 const TASKS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwCa8KZgXHyv_oDUoRfCQm_L_qLnm2s7c0fGGRZW5XpERYSAxFj9AGpxCiue1oaGdXt/exec";
 
 // 🌐 2. URL สำหรับจัดการ "ประกาศประจำสัปดาห์" (ใส่ URL ใหม่ของคุณตรงนี้)
-const ANNOUNCEMENT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwCa8KZgXHyv_oDUoRfCQm_L_qLnm2s7c0fGGRZW5XpERYSAxFj9AGpxCiue1oaGdXt/exec";
+const ANNOUNCEMENT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzrcj_R_b_R3LubcaqWVSwFZXfyDIQDDdnsc8Oflt9FMHGhqMVXauTd6WSdr_10-0pqeg/exec";
 
 // อ้างอิง DOM Elements
 const loginBtn = document.getElementById('loginBtn');
