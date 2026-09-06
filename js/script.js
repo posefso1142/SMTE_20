@@ -1,7 +1,7 @@
 // ==========================================================================
-// 📢 ข้อความประกาศประจำสัปดาห์ & ระบบแอดมิน
+// 📢 ประกาศเก็บเงินประจำสัปดาห์ & ระบบแอดมิน
 // ==========================================================================
-let CURRENT_ANNOUNCEMENT = "ปิดระบบโอนเงิน เทอม 1 ปีการศึกษา 2569";
+let CURRENT_ANNOUNCEMENT = "เปิดระบบ";
 
 // ข้อมูล Admin
 const ADMIN_USER = "ADMIN_SMTE20";
@@ -23,12 +23,13 @@ const adminPanel = document.getElementById('admin-panel');
 const logoutBtn = document.getElementById('logoutBtn');
 const taskForm = document.getElementById('task-form');
 const taskList = document.getElementById('task-list');
+const announcementBox = document.getElementById('announcement-box');
 
 let isAdmin = sessionStorage.getItem('isAdmin') === 'true';
 let tasks = [];
 
 // ==========================================
-// 🎨 ฟังก์ชัน SweetAlert2 Custom Notification
+// 🎨 ฟังก์ชัน SweetAlert2 Custom Toast/Popup
 // ==========================================
 function showSuccessToast(title, text = '') {
     Swal.fire({
@@ -38,9 +39,7 @@ function showSuccessToast(title, text = '') {
         showConfirmButton: false,
         timer: 1800,
         timerProgressBar: true,
-        customClass: {
-            popup: 'swal2-toast-custom'
-        }
+        confirmButtonColor: '#6366f1'
     });
 }
 
@@ -54,7 +53,9 @@ function showErrorToast(title, text = '') {
     });
 }
 
-// เปิด/ปิด Modal Login
+// ==========================================
+// 🔐 ระบบเข้าสู่ระบบ / ออกจากระบบ (Login / Logout)
+// ==========================================
 if (loginBtn) {
     loginBtn.addEventListener('click', () => {
         if (isAdmin) {
@@ -62,7 +63,7 @@ if (loginBtn) {
                 icon: 'info',
                 title: 'เข้าสู่ระบบอยู่แล้ว',
                 text: 'คุณอยู่ในระบบผู้ดูแลระบบเรียบร้อยแล้วครับ',
-                confirmButtonColor: '#3b82f6'
+                confirmButtonColor: '#6366f1'
             });
         } else {
             if (loginModal) loginModal.classList.add('show');
@@ -95,7 +96,7 @@ if (submitLogin) {
             if (loginModal) loginModal.classList.remove('show');
             clearLoginForm();
             
-            // ป็อปอัปยินดีต้อนรับแอดมิน แบบในรูป
+            // ป็อปอัปยินดีต้อนรับแอดมิน
             Swal.fire({
                 icon: 'success',
                 title: 'เข้าสู่ระบบสำเร็จ!',
@@ -128,7 +129,6 @@ if (logoutBtn) {
             if (result.isConfirmed) {
                 isAdmin = false;
                 sessionStorage.removeItem('isAdmin');
-                
                 showSuccessToast('ออกจากระบบสำเร็จ!', 'คืนค่าสิทธิ์ผู้ใช้งานทั่วไป');
                 updateUI();
             }
@@ -150,6 +150,99 @@ function updateUI() {
 }
 
 // ==========================================
+// 📢 ระบบแสดงผลและแก้ไขประกาศประจำสัปดาห์ (มีปุ่ม ✏️)
+// ==========================================
+function fetchAnnouncement() {
+    if (!announcementBox) return;
+
+    fetch(`${SCRIPT_URL}?action=getAnnouncement`)
+        .then(res => res.json())
+        .then(data => {
+            if (data && data.announcement) {
+                CURRENT_ANNOUNCEMENT = data.announcement;
+            }
+            renderAnnouncement();
+        })
+        .catch(() => {
+            if (localStorage.getItem('savedAnnouncement')) {
+                CURRENT_ANNOUNCEMENT = localStorage.getItem('savedAnnouncement');
+            }
+            renderAnnouncement();
+        });
+}
+
+function renderAnnouncement() {
+    if (!announcementBox) return;
+    
+    // ปุ่มแก้ไขรูปดินสอจะแสดงเฉพาะแอดมินเท่านั้น
+    const editBtnHtml = isAdmin 
+        ? `<button onclick="openEditAnnouncementModal()" title="แก้ไขข้อความประกาศ" style="background:none; border:none; color:#6366f1; cursor:pointer; margin-left:8px; font-size:1.05rem; transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'"><i class="fa-solid fa-pen-to-square"></i></button>` 
+        : '';
+
+    announcementBox.innerHTML = `
+        <p style="margin:0; display:flex; align-items:center; flex-wrap:wrap; gap:4px;">
+            <i class="fa-solid fa-bullhorn" style="color:#4f46e5; margin-right:4px;"></i> 
+            <strong>ประกาศสัปดาห์นี้:</strong> 
+            <span>${CURRENT_ANNOUNCEMENT}</span>
+            ${editBtnHtml}
+        </p>
+    `;
+}
+
+// Popup เปิดแก้ไขประกาศประจำสัปดาห์ (SweetAlert2)
+window.openEditAnnouncementModal = function() {
+    if (!isAdmin) return;
+
+    Swal.fire({
+        title: '✏️ แก้ไขข้อความประกาศ',
+        input: 'text',
+        inputValue: CURRENT_ANNOUNCEMENT,
+        inputPlaceholder: 'กรอกข้อความประกาศใหม่...',
+        showCancelButton: true,
+        confirmButtonText: 'ตกลง',
+        cancelButtonText: 'ยกเลิก',
+        confirmButtonColor: '#6366f1',
+        cancelButtonColor: '#64748b',
+        inputValidator: (value) => {
+            if (!value.trim()) {
+                return 'กรุณากรอกข้อความประกาศก่อนบันทึก!';
+            }
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const newAnnounce = result.value.trim();
+            saveAnnouncement(newAnnounce);
+        }
+    });
+};
+
+function saveAnnouncement(newAnnounce) {
+    // อัปเดตการแสดงผลทันที
+    CURRENT_ANNOUNCEMENT = newAnnounce;
+    localStorage.setItem('savedAnnouncement', newAnnounce);
+    renderAnnouncement();
+
+    const dataToSend = {
+        action: "updateAnnouncement",
+        announcement: newAnnounce
+    };
+
+    fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dataToSend)
+    })
+    .then(() => {
+        showSuccessToast('บันทึกประกาศสำเร็จ!', 'อัปเดตข้อความประกาศประจำสัปดาห์เรียบร้อยแล้ว');
+    })
+    .catch(err => {
+        console.error("Error saving announcement:", err);
+        showErrorToast('เกิดข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อฐานข้อมูลเพื่อบันทึกได้');
+    });
+}
+
+// ==========================================
 // ฟังก์ชัน 1: ดึงข้อมูลตารางงานจาก Google Sheets
 // ==========================================
 function fetchTasksFromSheets() {
@@ -160,7 +253,6 @@ function fetchTasksFromSheets() {
     fetch(SCRIPT_URL)
         .then(res => res.json())
         .then(data => {
-            // ถ้าระบบส่งข้อมูลรวมแบบ Object
             if (data.tasks) {
                 tasks = data.tasks;
             } else if (Array.isArray(data)) {
@@ -259,7 +351,7 @@ if (taskForm) {
             body: JSON.stringify(newTask)
         })
         .then(() => {
-            showSuccessToast('เพิ่มงานสำเร็จ!', 'บันทึกข้อมูลงานใหม่ลงตารางเรียบร้อยแล้ว');
+            showSuccessToast('เพิ่มงานสำเร็จ!', 'บันทึกรายการงานใหม่ลงในตารางเรียบร้อย');
             taskForm.reset();
             setTimeout(() => {
                 fetchTasksFromSheets(); 
@@ -267,7 +359,7 @@ if (taskForm) {
         })
         .catch(err => {
             console.error("Error adding task:", err);
-            showErrorToast('เกิดข้อผิดพลาด', 'ไม่สามารถเพิ่มข้อมูลได้ กรุณาลองใหม่อีกครั้ง');
+            showErrorToast('เกิดข้อผิดพลาด', 'ไม่สามารถบันทึกข้อมูลได้');
         })
         .finally(() => {
             if (submitBtn) {
@@ -286,7 +378,7 @@ window.deleteTask = function(idToDelete) {
     
     Swal.fire({
         title: 'ยืนยันการลบงาน?',
-        text: "คุณแน่ใจหรือไม่ที่จะลบงานนี้ออกจากระบบอย่างถาวร",
+        text: "คุณแน่ใจหรือไม่ที่จะลบงานนี้ออกจากตารางอย่างถาวร",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#ef4444',
@@ -307,7 +399,7 @@ window.deleteTask = function(idToDelete) {
                 body: JSON.stringify(dataToSend)
             })
             .then(() => {
-                showSuccessToast('ลบงานสำเร็จ!', 'ลบรายการงานออกจากตารางเรียบร้อย');
+                showSuccessToast('ลบงานสำเร็จ!', 'รายการงานถูกลบเรียบร้อยแล้ว');
                 setTimeout(() => {
                     fetchTasksFromSheets(); 
                 }, 1200);
@@ -321,86 +413,7 @@ window.deleteTask = function(idToDelete) {
 };
 
 // ==========================================
-// 📢 ระบบแสดงผลและจัดการประกาศประจำสัปดาห์ (Real-time Google Sheets)
-// ==========================================
-const announcementBox = document.getElementById('announcement-box'); 
-const saveAnnouncementBtn = document.getElementById('saveAnnouncementBtn');
-
-// ดึงประกาศจาก Google Sheets
-function fetchAnnouncement() {
-    if (!announcementBox) return;
-
-    fetch(`${SCRIPT_URL}?action=getAnnouncement`)
-        .then(res => res.json())
-        .then(data => {
-            if (data && data.announcement) {
-                CURRENT_ANNOUNCEMENT = data.announcement;
-            }
-            renderAnnouncement();
-        })
-        .catch(() => {
-            // ถ้าดึงจากเน็ตไม่ได้ ให้ดึงจาก LocalStorage สำรอง
-            if (localStorage.getItem('savedAnnouncement')) {
-                CURRENT_ANNOUNCEMENT = localStorage.getItem('savedAnnouncement');
-            }
-            renderAnnouncement();
-        });
-}
-
-function renderAnnouncement() {
-    if (!announcementBox) return;
-    announcementBox.innerHTML = `<p style="margin:0;"><i class="fa-solid fa-bullhorn" style="color:#3b82f6;"></i> <strong>ประกาศสัปดาห์นี้:</strong> ${CURRENT_ANNOUNCEMENT}</p>`;
-    
-    const editAnnounceInput = document.getElementById('edit-announcement-input');
-    if (editAnnounceInput && isAdmin) {
-        editAnnounceInput.value = CURRENT_ANNOUNCEMENT;
-    }
-}
-
-// บันทึกประกาศลง Google Sheets
-if (saveAnnouncementBtn) {
-    saveAnnouncementBtn.addEventListener('click', () => {
-        const editInput = document.getElementById('edit-announcement-input');
-        const newAnnounce = editInput ? editInput.value.trim() : '';
-        
-        if (newAnnounce === '') {
-            showErrorToast('กรุณากรอกข้อความ', 'ข้อความประกาศต้องไม่เป็นค่าว่าง');
-            return;
-        }
-
-        saveAnnouncementBtn.disabled = true;
-        saveAnnouncementBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> บันทึก...`;
-
-        const dataToSend = {
-            action: "updateAnnouncement",
-            announcement: newAnnounce
-        };
-
-        fetch(SCRIPT_URL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(dataToSend)
-        })
-        .then(() => {
-            CURRENT_ANNOUNCEMENT = newAnnounce;
-            localStorage.setItem('savedAnnouncement', newAnnounce);
-            renderAnnouncement();
-            showSuccessToast('อัปเดตประกาศสำเร็จ!', 'ทุกคนในเว็บจะเห็นข้อความใหม่นี้ทันที');
-        })
-        .catch(err => {
-            console.error("Error saving announcement:", err);
-            showErrorToast('เกิดข้อผิดพลาด', 'ไม่สามารถอัปเดตประกาศได้');
-        })
-        .finally(() => {
-            saveAnnouncementBtn.disabled = false;
-            saveAnnouncementBtn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> บันทึกประกาศ`;
-        });
-    });
-}
-
-// ==========================================
-// ✏️ ระบบเปิด/ปิดและแก้ไขข้อมูลงาน
+// ✏️ ระบบเปิด/ปิดและแก้ไขข้อมูลงานในตาราง
 // ==========================================
 const editModal = document.getElementById('editModal');
 const closeEditModal = document.querySelector('.close-edit-modal');
@@ -459,7 +472,7 @@ if (editTaskForm) {
         })
         .then(() => {
             if (editModal) editModal.classList.remove('show');
-            showSuccessToast('แก้ไขงานสำเร็จ!', 'อัปเดตข้อมูลลงตารางเรียบร้อยแล้ว');
+            showSuccessToast('แก้ไขงานสำเร็จ!', 'อัปเดตข้อมูลรายการงานเรียบร้อยแล้ว');
             setTimeout(() => {
                 fetchTasksFromSheets(); 
             }, 1200);
