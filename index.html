@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<!-- SweetAlert2 CSS & JS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SMTE20 Classroom</title>
+    
+    <!-- SweetAlert2 CSS & JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -124,29 +126,6 @@
             border: 1px solid rgba(147, 197, 253, 0.2);
         }
 
-        /* ปุ่มการทำงานแอดมิน */
-        .btn-announce-save {
-            background: #3b82f6;
-            color: #ffffff;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 10px;
-            font-weight: 600;
-            font-family: 'Prompt', sans-serif;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            white-space: nowrap;
-        }
-
-        .btn-announce-save:hover {
-            background: #2563eb;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-
         .btn-logout {
             background-color: #ef4444;
             color: white;
@@ -247,17 +226,6 @@
                 <button id="logoutBtn" class="btn-logout" title="ออกจากระบบแอดมิน">
                     <i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ
                 </button>
-            </div>
-
-            <!-- แก้ไขข้อความประกาศประจำสัปดาห์ -->
-            <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px dashed #cbd5e1;">
-                <h4 style="margin: 0 0 10px 0;"><i class="fa-solid fa-bullhorn" style="color: #3b82f6;"></i> แก้ไขประกาศประจำสัปดาห์</h4>
-                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    <input type="text" id="edit-announcement-input" placeholder="พิมพ์ข้อความประกาศใหม่ที่นี่..." style="flex: 1; min-width: 240px; padding: 10px 14px; border-radius: 10px; border: 1px solid #cbd5e1; font-family: 'Prompt';">
-                    <button id="saveAnnouncementBtn" class="btn-announce-save">
-                        <i class="fa-solid fa-floppy-disk"></i> บันทึกประกาศ
-                    </button>
-                </div>
             </div>
 
             <!-- ฟอร์มเพิ่มงานใหม่ -->
