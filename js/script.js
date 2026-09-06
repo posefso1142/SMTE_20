@@ -1,14 +1,17 @@
 // ==========================================================================
 // 📢 ประกาศเก็บเงินประจำสัปดาห์ & ระบบแอดมิน
 // ==========================================================================
-let CURRENT_ANNOUNCEMENT = "เปิดระบบ";
+let CURRENT_ANNOUNCEMENT = "กำลังโหลดประกาศ";
 
 // ข้อมูล Admin
-const ADMIN_USER = "ADMIN_SMTE20";
-const ADMIN_PASS = "SMTE_202020";
+const ADMIN_USER = "ADMIN";
+const ADMIN_PASS = "SMTE";
 
-// 🌐 URL ของ Google Apps Script Web App
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwCa8KZgXHyv_oDUoRfCQm_L_qLnm2s7c0fGGRZW5XpERYSAxFj9AGpxCiue1oaGdXt/exec";
+// 🌐 1. URL สำหรับจัดการ "ตารางงาน" (Google Apps Script)
+const TASKS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwCa8KZgXHyv_oDUoRfCQm_L_qLnm2s7c0fGGRZW5XpERYSAxFj9AGpxCiue1oaGdXt/exec";
+
+// 🌐 2. URL สำหรับจัดการ "ประกาศประจำสัปดาห์" (ใส่ URL ใหม่ของคุณตรงนี้)
+const ANNOUNCEMENT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwCa8KZgXHyv_oDUoRfCQm_L_qLnm2s7c0fGGRZW5XpERYSAxFj9AGpxCiue1oaGdXt/exec";
 
 // อ้างอิง DOM Elements
 const loginBtn = document.getElementById('loginBtn');
@@ -150,12 +153,12 @@ function updateUI() {
 }
 
 // ==========================================
-// 📢 ระบบแสดงผลและแก้ไขประกาศประจำสัปดาห์ (มีปุ่ม ✏️)
+// 📢 ระบบแสดงผลและแก้ไขประกาศประจำสัปดาห์ (เชื่อมกับ ANNOUNCEMENT_SCRIPT_URL)
 // ==========================================
 function fetchAnnouncement() {
     if (!announcementBox) return;
 
-    fetch(`${SCRIPT_URL}?action=getAnnouncement`)
+    fetch(`${ANNOUNCEMENT_SCRIPT_URL}?action=getAnnouncement`)
         .then(res => res.json())
         .then(data => {
             if (data && data.announcement) {
@@ -227,7 +230,7 @@ function saveAnnouncement(newAnnounce) {
         announcement: newAnnounce
     };
 
-    fetch(SCRIPT_URL, {
+    fetch(ANNOUNCEMENT_SCRIPT_URL, {
         method: "POST",
         mode: "no-cors",
         headers: { "Content-Type": "application/json" },
@@ -243,14 +246,14 @@ function saveAnnouncement(newAnnounce) {
 }
 
 // ==========================================
-// ฟังก์ชัน 1: ดึงข้อมูลตารางงานจาก Google Sheets
+// ฟังก์ชัน 1: ดึงข้อมูลตารางงานจาก Google Sheets (เชื่อมกับ TASKS_SCRIPT_URL)
 // ==========================================
 function fetchTasksFromSheets() {
     if (!taskList) return;
 
     taskList.innerHTML = `<tr><td colspan="${isAdmin ? 6 : 5}" class="text-center" style="color: #a0aec0; padding: 20px;"><i class="fa-solid fa-spinner fa-spin"></i> กำลังโหลดตารางงานจาก Google Sheets...</td></tr>`;
 
-    fetch(SCRIPT_URL)
+    fetch(TASKS_SCRIPT_URL)
         .then(res => res.json())
         .then(data => {
             if (data.tasks) {
@@ -320,7 +323,7 @@ function renderTasks() {
 }
 
 // ==========================================
-// ฟังก์ชัน 3: เพิ่มงานใหม่ลง Google Sheets
+// ฟังก์ชัน 3: เพิ่มงานใหม่ลง Google Sheets (เชื่อมกับ TASKS_SCRIPT_URL)
 // ==========================================
 if (taskForm) {
     taskForm.addEventListener('submit', (e) => {
@@ -344,7 +347,7 @@ if (taskForm) {
             submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...`;
         }
 
-        fetch(SCRIPT_URL, {
+        fetch(TASKS_SCRIPT_URL, {
             method: "POST",
             mode: "no-cors",
             headers: { "Content-Type": "application/json" },
@@ -371,7 +374,7 @@ if (taskForm) {
 }
 
 // ==========================================
-// ฟังก์ชัน 4: ลบงานออกจาก Google Sheets
+// ฟังก์ชัน 4: ลบงานออกจาก Google Sheets (เชื่อมกับ TASKS_SCRIPT_URL)
 // ==========================================
 window.deleteTask = function(idToDelete) {
     if (!isAdmin) return;
@@ -392,7 +395,7 @@ window.deleteTask = function(idToDelete) {
                 id: idToDelete
             };
 
-            fetch(SCRIPT_URL, {
+            fetch(TASKS_SCRIPT_URL, {
                 method: "POST",
                 mode: "no-cors",
                 headers: { "Content-Type": "application/json" },
@@ -413,7 +416,7 @@ window.deleteTask = function(idToDelete) {
 };
 
 // ==========================================
-// ✏️ ระบบเปิด/ปิดและแก้ไขข้อมูลงานในตาราง
+// ✏️ ระบบเปิด/ปิดและแก้ไขข้อมูลงานในตาราง (เชื่อมกับ TASKS_SCRIPT_URL)
 // ==========================================
 const editModal = document.getElementById('editModal');
 const closeEditModal = document.querySelector('.close-edit-modal');
@@ -464,7 +467,7 @@ if (editTaskForm) {
             submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...`;
         }
 
-        fetch(SCRIPT_URL, {
+        fetch(TASKS_SCRIPT_URL, {
             method: "POST",
             mode: "no-cors",
             headers: { "Content-Type": "application/json" },
