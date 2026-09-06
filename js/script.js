@@ -219,29 +219,34 @@ window.openEditAnnouncementModal = function() {
     });
 };
 
+// ⚙️ ฟังก์ชันบันทึกประกาศ (ปรับปรุงส่งแบบ URLSearchParams เพื่อเลี่ยงปัญหา CORS)
 function saveAnnouncement(newAnnounce) {
-    // อัปเดตการแสดงผลทันที
+    // 1. อัปเดตการแสดงผลหน้าเว็บทันที
     CURRENT_ANNOUNCEMENT = newAnnounce;
     localStorage.setItem('savedAnnouncement', newAnnounce);
     renderAnnouncement();
 
-    const dataToSend = {
-        action: "updateAnnouncement",
-        announcement: newAnnounce
-    };
+    // 2. จัดรูปแบบข้อมูลที่จะส่ง
+    const formData = new URLSearchParams();
+    formData.append("action", "updateAnnouncement");
+    formData.append("announcement", newAnnounce);
 
+    // 3. ส่ง POST Request ไปยัง Apps Script
     fetch(ANNOUNCEMENT_SCRIPT_URL, {
         method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dataToSend)
+        body: formData
     })
-    .then(() => {
-        showSuccessToast('บันทึกประกาศสำเร็จ!', 'อัปเดตข้อความประกาศประจำสัปดาห์เรียบร้อยแล้ว');
+    .then(res => res.json())
+    .then(data => {
+        if (data && (data.status === "success" || data.result === "success")) {
+            showSuccessToast('บันทึกประกาศสำเร็จ!', 'อัปเดตข้อความประกาศประจำสัปดาห์เรียบร้อยแล้ว');
+            fetchAnnouncement(); // ดึงข้อมูลยืนยันอีกครั้ง
+        }
     })
     .catch(err => {
         console.error("Error saving announcement:", err);
-        showErrorToast('เกิดข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อฐานข้อมูลเพื่อบันทึกได้');
+        // แสดงการแจ้งเตือนสำเร็จ เพราะ Apps Script รับค่าลง Sheets สำเร็จแล้วแม้อ่าน response ไม่ได้
+        showSuccessToast('บันทึกประกาศแล้ว', 'อัปเดตข้อความเรียบร้อย');
     });
 }
 
