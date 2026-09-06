@@ -1,7 +1,7 @@
-/* 
-    SMTE20 Classroom - Ultra Modern Minimalist 
-    Focus: Clean UI, Strict Visibility, Zero Overflow
-*/
+/* ========================================================
+   SMTE20 Classroom - Ultra Modern Minimalist 
+   Focus: Clean UI, Strict Visibility, Zero Overflow
+   ======================================================== */
 
 /* --- 1. STRICT VISIBILITY (แก้ปัญหาหน้าแอดมินเด้ง) --- */
 .hidden {
@@ -283,26 +283,25 @@ span[style*="background-color:#ffe3e3"] {
     .content-card { padding: 25px; border-radius: 20px; }
     .task-form { grid-template-columns: 1fr; } /* มือถือเรียงลงมาข้างล่าง 100% */
 }
+
 /* ========================================================
    🛠️ ปรับปรุงสไตล์ Modal และปุ่มแผงควบคุมแอดมิน (Admin Panel Fixes)
    ======================================================== */
 
-/* 1. แก้ไขข้อความกำกับช่องกรอก (Label) ใน Modal ให้มองเห็นชัดเจน */
 .modal .input-group label,
 #edit-task-form .input-group label {
     display: block;
-    color: #475569 !important; /* เปลี่ยนจากสีเทาอ่อนเป็นสีเทาเข้ม สบายตาและคมชัด */
+    color: #475569 !important;
     font-size: 0.9rem;
     font-weight: 500;
     margin-bottom: 6px;
     text-align: left;
 }
 
-/* 2. เปลี่ยนสไตล์ปุ่ม "ออกจากระบบแอดมิน" ให้สวยหรู มินิมอล */
 .btn-logout, #logoutBtn {
     background-color: transparent !important;
-    color: #ef4444 !important; /* ใช้ตัวหนังสือสีแดงเพื่อบอกสัญลักษณ์การออกจากระบบ */
-    border: 1px solid #fee2e2 !important; /* เส้นขอบสีแดงจางๆ */
+    color: #ef4444 !important;
+    border: 1px solid #fee2e2 !important;
     padding: 10px 20px;
     border-radius: 12px;
     font-size: 0.9rem;
@@ -314,29 +313,27 @@ span[style*="background-color:#ffe3e3"] {
     justify-content: center;
 }
 
-/* เอฟเฟกต์เมื่อเอาเมาส์ไปชี้ปุ่มออกจากระบบ (Hover) */
 .btn-logout:hover, #logoutBtn:hover {
-    background-color: #ef4444 !important; /* เปลี่ยนพื้นหลังเป็นสีแดงเด่นชัด */
-    color: #ffffff !important; /* ตัวหนังสือเปลี่ยนเป็นสีขาว */
+    background-color: #ef4444 !important;
+    color: #ffffff !important;
     box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
     transform: translateY(-1px);
 }
 
-/* 3. จัดการสีในระบบโหมดมืด (Dark Theme) สำหรับฟอร์มแก้ไขเพิ่มเติม */
 body.dark-theme .modal .input-group label,
 body.dark-theme #edit-task-form .input-group label {
-    color: #94a3b8 !important; /* ในโหมดมืด ปรับให้เป็นสีเทาสว่างเพื่อให้อ่านออก */
+    color: #94a3b8 !important;
 }
 
 body.dark-theme .btn-logout, 
 body.dark-theme #logoutBtn {
-    border-color: rgba(239, 68, 68, 0.3) !important; /* ปรับเส้นขอบปุ่มล็อกเอาต์ให้กลืนกับโหมดมืด */
+    border-color: rgba(239, 68, 68, 0.3) !important;
 }
+
 /* ========================================================
    ✨ ULTRA MODERN BUTTONS & ANNOUNCEMENT CARD UPGRADE
    ======================================================== */
 
-/* --- 1. ปรับแต่งปุ่มแก้ไข (ดินสอ) และปุ่มลบ (ถังขยะ) ในตารางให้สวยพรีเมียม --- */
 .custom-table td button,
 .custom-table td .btn-edit,
 .custom-table td .btn-delete {
@@ -354,11 +351,10 @@ body.dark-theme #logoutBtn {
     margin: 0 4px;
 }
 
-/* ปุ่มแก้ไข (ดินสอสีส้ม/เหลืองแบบซอฟต์) */
 .custom-table td button:first-child,
 .custom-table td .btn-edit {
-    color: #eab308 !important; /* สีส้มอมเหลืองแบบโมเดิร์น */
-    background: rgba(234, 179, 8, 0.1) !important; /* พื้นหลังจางๆ */
+    color: #eab308 !important;
+    background: rgba(234, 179, 8, 0.1) !important;
 }
 .custom-table td button:first-child:hover,
 .custom-table td .btn-edit:hover {
@@ -367,11 +363,10 @@ body.dark-theme #logoutBtn {
     transform: translateY(-1px);
 }
 
-/* ปุ่มลบ (ถังขยะสีแดงซอฟต์) */
 .custom-table td button:last-child,
 .custom-table td .btn-delete {
-    color: #ef4444 !important; /* สีแดงพรีเมียม */
-    background: rgba(239, 68, 68, 0.1) !important; /* พื้นหลังจางๆ */
+    color: #ef4444 !important;
+    background: rgba(239, 68, 68, 0.1) !important;
 }
 .custom-table td button:last-child:hover,
 .custom-table td .btn-delete {
@@ -380,31 +375,27 @@ body.dark-theme #logoutBtn {
     transform: translateY(-1px);
 }
 
-
-/* --- 2. จัดระเบียบโซนเก็บเงินประจำสัปดาห์ ไม่ให้ปุ่มลอยทับประกาศ --- */
 #money-section {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 15px; /* จัดช่องไฟให้องค์ประกอบเท่ากัน */
+    gap: 15px;
 }
 
-/* รื้อระบบกล่องประกาศใหม่ให้เด่น ชัดเจน ไม่โดนทับ */
 .announcement-container, #announcement-box {
     width: 100%;
     max-width: 650px;
     background: var(--primary-soft) !important;
     border: 1px solid var(--border) !important;
-    border-left: 5px solid var(--primary) !important; /* เส้นแถบสีเด่นด้านซ้าย */
+    border-left: 5px solid var(--primary) !important;
     padding: 20px 25px !important;
     border-radius: 18px !important;
-    margin: 15px 0 !important; /* คุมระยะห่างบนล่าง */
+    margin: 15px 0 !important;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
-    position: relative !important; /* บังคับจัดระเบียบในโฟลว์หน้าเว็บ */
+    position: relative !important;
 }
 
-/* ตัวหนังสือประกาศข้างใน */
 #announcement-text {
     font-size: 1.05rem !important;
     font-weight: 500 !important;
@@ -421,16 +412,15 @@ body.dark-theme #logoutBtn {
     font-size: 1.3rem;
 }
 
-/* ดักทางปุ่ม "ไปยังระบบเก็บเงินห้อง" บังคับไม่ให้ลอยเคลื่นที่ซ้อน */
 #money-section .btn-primary,
 .btn-primary[href*="posefso1142"] {
-    position: relative !important; /* ปลดล็อกค่าลอยตัวเก่า */
-    top: 0 !important; /* รีเซ็ตระยะเลื่อน */
+    position: relative !important;
+    top: 0 !important;
     display: inline-flex !important;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    width: auto !important; /* ปล่อยให้ขนาดหดพอดีสวยตามตัวอักษร ไม่ย้วยเต็มจอ */
+    width: auto !important;
     padding: 12px 28px !important;
     margin-top: 10px !important;
     border-radius: 14px !important;
@@ -438,58 +428,54 @@ body.dark-theme #logoutBtn {
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25) !important;
 }
 
-/* --- 3. บังคับเปลี่ยนสีในโหมดมืด (Dark Theme) ให้คมชัดร้อยเปอร์เซ็นต์ --- */
 body.dark-theme #announcement-text {
-    color: #f8fafc !important; /* ตัวหนังสือประกาศสีขาวสว่าง */
+    color: #f8fafc !important;
 }
 body.dark-theme .announcement-container, 
 body.dark-theme #announcement-box {
     background: rgba(99, 102, 241, 0.15) !important;
     border-color: #1e293b !important;
 }
+
 /* ========================================================
    ✨ MODERN LIGHT MODAL & CLEAN UI FIX (เน้นพื้นขาว อักษรชัด)
    ======================================================== */
 
-/* --- 1. จัดการหน้าต่างป๊อปอัปทั้งหมด (Login & Edit Modal) ให้เป็นสีขาวสวยคมชัด --- */
 .modal-content, 
 body.dark-theme .modal-content {
-    background-color: #ffffff !important; /* บังคับพื้นหลังเป็นสีขาวเคลียร์ ไม่เปลี่ยนเป็นสีมืด */
-    border-radius: 24px !important; /* ขอบมนสวยสไตล์ Apple */
+    background-color: #ffffff !important;
+    border-radius: 24px !important;
     padding: 35px !important;
     border: 1px solid #e2e8f0 !important;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15) !important;
 }
 
-/* หัวข้อใหญ่ด้านบนสุด (เช่น แอดมินเข้าสู่ระบบ, แก้ไขข้อมูลงาน) */
 .modal-content h3, 
 body.dark-theme .modal-content h3 {
-    color: #0f172a !important; /* บังคับเป็นสีเข้มชัดเจน ไม่กลืนหาย */
+    color: #0f172a !important;
     font-size: 1.4rem !important;
     font-weight: 600 !important;
     margin-bottom: 20px !important;
     text-align: left !important;
 }
 
-/* ข้อความกำกับช่องพิมพ์ (Label เช่น Username, Password, ชื่องาน) */
 .modal .input-group label,
 #edit-task-form .input-group label,
 body.dark-theme .modal .input-group label,
 body.dark-theme #edit-task-form .input-group label {
     display: block !important;
-    color: #475569 !important; /* สีเทาเข้ม สบายตาและคมชัด */
+    color: #475569 !important;
     font-size: 0.9rem !important;
     font-weight: 500 !important;
     margin-bottom: 6px !important;
     text-align: left !important;
 }
 
-/* ช่องสำหรับกรอกข้อมูลภายในป๊อปอัป */
 .modal .input-group input,
 body.dark-theme .modal .input-group input {
-    background-color: #f8fafc !important; /* พื้นหลังช่องกรอกสีนวลสะอาด */
-    border: 1px solid #cbd5e1 !important; /* เส้นขอบชัดเจน */
-    color: #0f172a !important; /* ตัวหนังสือสีเข้มอ่านง่าย */
+    background-color: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #0f172a !important;
     border-radius: 12px !important;
     padding: 12px 16px !important;
     font-size: 0.95rem !important;
@@ -497,18 +483,16 @@ body.dark-theme .modal .input-group input {
     box-sizing: border-box !important;
 }
 
-/* โฟกัสเมื่อคลิกพิมพ์ข้อความ */
 .modal .input-group input:focus {
     border-color: var(--primary) !important;
     background-color: #ffffff !important;
     box-shadow: 0 0 0 4px var(--primary-soft) !important;
 }
 
-/* --- 2. จัดบาลานซ์ปุ่มกดภายในป๊อปอัปให้เต็มความกว้าง สมมาตร สวยงาม --- */
 .btn-login-submit, 
 #submitLogin,
 #edit-task-form button[type="submit"] {
-    width: 100% !important; /* ยืดปุ่มให้กว้างเท่าช่องกรอก */
+    width: 100% !important;
     padding: 14px !important;
     font-size: 1rem !important;
     font-weight: 600 !important;
@@ -523,8 +507,6 @@ body.dark-theme .modal .input-group input {
     transition: all 0.2s ease !important;
 }
 
-
-/* --- 3. แก้ไขระบบกล่องประกาศประจำสัปดาห์ ไม่ให้ปุ่มลอยขึ้นมาทับซ้อน --- */
 #money-section {
     display: flex !important;
     flex-direction: column !important;
@@ -532,7 +514,6 @@ body.dark-theme .modal .input-group input {
     gap: 10px !important;
 }
 
-/* กล่องข้อความประกาศประจำสัปดาห์ */
 .announcement-container, 
 #announcement-box,
 body.dark-theme .announcement-container,
@@ -541,54 +522,51 @@ body.dark-theme #announcement-box {
     max-width: 650px !important;
     background: var(--primary-soft) !important;
     border: 1px solid var(--border) !important;
-    border-left: 5px solid var(--primary) !important; /* เส้นแท็บหนาด้านซ้าย */
+    border-left: 5px solid var(--primary) !important;
     padding: 18px 22px !important;
     border-radius: 16px !important;
     margin: 15px 0 !important;
-    position: relative !important; /* บังคับให้อยู่ในแถวปกติ ไม่ให้สิ่งอื่นลอยมาทับ */
+    position: relative !important;
 }
 
-/* ตัวหนังสือในกล่องประกาศ */
 #announcement-text,
 body.dark-theme #announcement-text {
     font-size: 1.05rem !important;
     font-weight: 500 !important;
-    color: var(--text-main) !important; /* เปลี่ยนตามโหมดหลักอัตโนมัติ */
+    color: var(--text-main) !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     gap: 10px !important;
 }
 
-/* จัดระเบียบปุ่ม "ไปยังระบบเก็บเงินห้อง" ไม่ให้หลุดตำแหน่ง */
 #money-section .btn-primary,
 .btn-primary[href*="posefso1142"] {
-    position: relative !important; /* ปลดล็อกไม่ให้ปุ่มลอยขึ้นข้างบน */
+    position: relative !important;
     top: 0 !important; 
     display: inline-flex !important;
-    width: auto !important; /* ขนาดปุ่มพอดีตัวอักษร ไม่ย้วย */
+    width: auto !important;
     padding: 12px 28px !important;
     border-radius: 14px !important;
     text-decoration: none !important;
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2) !important;
 }
+
 /* ========================================================
    💥 ULTIMATE RESPONSIVE & ZERO OVERFLOW FOR INPUT DATE
    ======================================================== */
 
-/* 1. เจาะจงทำลาย Grid เก่าในแผงแอดมินบนมือถือ/ไอแพด เพื่อบังคับให้เรียงลงมาตรงๆ ไม่ดันกันออกข้าง */
 @media screen and (max-width: 1024px) {
     .task-form, 
     #task-form,
     #admin-panel form {
         display: flex !important;
-        flex-direction: column !important; /* เปลี่ยนจาก Grid เป็น Flex แนวตั้ง */
+        flex-direction: column !important;
         gap: 12px !important;
         width: 100% !important;
         box-sizing: border-box !important;
     }
 
-    /* บังคับช่องกรอกทุกช่องให้กว้างเท่ากันเป๊ะในแนวตั้ง */
     .task-form input,
     #admin-panel input,
     input[type="date"] {
@@ -600,15 +578,13 @@ body.dark-theme #announcement-text {
     }
 }
 
-/* 2. บล็อกระบบแฝงของไอโฟน/ไอแพด (iOS/iPadOS) ที่ทำให้ช่อง Date ปูดเบี้ยว */
 input[type="date"] {
-    -webkit-appearance: none !important; /* ล้างสไตล์ดั้งเดิมของ Apple */
+    -webkit-appearance: none !important;
     -moz-appearance: none !important;
     appearance: none !important;
-    min-height: 45px !important; /* ตั้งความสูงให้เท่ากับช่อง text ปกติ */
+    min-height: 45px !important;
 }
 
-/* 3. จัดการระยะของปุ่มส่งงานบนมือถือให้กว้างเต็มบาลานซ์สวยๆ */
 @media screen and (max-width: 768px) {
     .btn-add, #task-form button[type="submit"] {
         width: 100% !important;
@@ -616,6 +592,7 @@ input[type="date"] {
         border-radius: 14px !important;
     }
 }
+
 /* ========================================================
    🌟 FORCE FOOTER TO BOTTOM (บังคับอยู่ล่างสุด ไม่หายแน่นอน)
    ======================================================== */
@@ -623,10 +600,10 @@ input[type="date"] {
     background: var(--bg-card) !important;
     border-top: 1px solid var(--border) !important;
     padding: 40px 20px 30px !important;
-    margin-top: 80px !important; /* เพิ่มระยะห่างจากเนื้อหาด้านบน */
+    margin-top: 80px !important;
     width: 100% !important;
-    clear: both !important; /* ล้างค่าลอยตัวของชิ้นส่วนอื่น */
-    display: block !important; /* บังคับให้แสดงผลเป็นกล่อง */
+    clear: both !important;
+    display: block !important;
 }
 
 .footer-container {
@@ -644,7 +621,7 @@ input[type="date"] {
     gap: 8px;
     font-size: 1.1rem;
     font-weight: 600;
-    color: #6366f1; /* สีฟ้านีออนโมเดิร์น */
+    color: #6366f1;
     margin-bottom: 6px;
 }
 
@@ -673,8 +650,72 @@ input[type="date"] {
     font-weight: 600;
 }
 
-/* เอฟเฟกต์โหมดมืด */
 body.dark-theme .main-footer {
-    background: #0f172a !important; /* สีน้ำเงินเข้มพรีเมียม */
+    background: #0f172a !important;
     border-top: 1px solid #1e293b !important;
+}
+
+/* ========================================================
+   🎨 SWEETALERT2 STYLING (ปรับแต่ง Popup ป๊อปอัปให้เข้ากับเว็บไซต์)
+   ======================================================== */
+.swal2-popup {
+    border-radius: 24px !important;
+    font-family: 'Prompt', sans-serif !important;
+    background: var(--bg-card) !important;
+    color: var(--text-main) !important;
+    border: 1px solid var(--border) !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+}
+
+.swal2-title {
+    color: var(--text-main) !important;
+    font-size: 1.35rem !important;
+    font-weight: 600 !important;
+}
+
+.swal2-html-container {
+    color: var(--text-muted) !important;
+    font-size: 0.95rem !important;
+}
+
+.swal2-input {
+    background: var(--bg-body) !important;
+    color: var(--text-main) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 14px !important;
+    padding: 12px 16px !important;
+    height: 48px !important;
+    font-size: 0.95rem !important;
+    box-shadow: none !important;
+}
+
+.swal2-input:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 4px var(--primary-soft) !important;
+}
+
+.swal2-styled.swal2-confirm {
+    border-radius: 12px !important;
+    font-weight: 600 !important;
+    padding: 12px 24px !important;
+    font-size: 0.95rem !important;
+}
+
+.swal2-styled.swal2-cancel {
+    border-radius: 12px !important;
+    font-weight: 500 !important;
+    padding: 12px 24px !important;
+    font-size: 0.95rem !important;
+}
+
+/* โหมดมืดสำหรับ SweetAlert2 */
+body.dark-theme .swal2-popup {
+    background: #0f172a !important;
+    border-color: #1e293b !important;
+}
+
+body.dark-theme .swal2-input {
+    background: #020617 !important;
+    border-color: #1e293b !important;
+    color: #f8fafc !important;
 }
