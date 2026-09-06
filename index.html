@@ -6,93 +6,202 @@
     <title>SMTE20 Classroom</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     
     <style>
         /* ========================================================
-           🌟 โค้ดส่วนควบคุมระบบ Modal ให้รองรับทุกอุปกรณ์ (Responsive)
+           🌟 ระบบ Modal & Admin UI แบบ Responsive และรองรับ Dark Mode
            ======================================================== */
         
-        /* 1. ตัวพื้นหลังโมดอล (Overlay) */
+        /* 1. Modal Overlay */
         .modal {
-            display: none; /* ซ่อนไว้เป็นค่าเริ่มต้น */
+            display: none;
             position: fixed;
-            z-index: 9999; /* อยู่บนสุดของทุกองค์ประกอบ */
+            z-index: 9999;
             left: 0;
             top: 0;
             width: 100vw;
             height: 100vh;
-            background-color: rgba(15, 23, 42, 0.6); /* ปรับพื้นหลังให้ดูโมเดิร์น ซอฟต์สายตา */
-            backdrop-filter: blur(4px); /* เบลอฉากหลังเพิ่มความมิติ */
-            overflow-y: auto; /* เปิดให้สกรอลล์ในระดับพื้นหลังได้ถ้าวอล์เปเปอร์ล้น */
+            background-color: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(6px);
+            overflow-y: auto;
             align-items: center;
             justify-content: center;
             padding: 16px;
             box-sizing: border-box;
+            transition: all 0.3s ease;
         }
 
-        /* 🌟 เพิ่มคลาสนี้: เมื่อ JavaScript สั่งเปิด (add class "show") ให้แสดงผลเป็น Flex */
         .modal.show {
             display: flex !important;
         }
 
-        /* บังคับปิดทับกลไกแสดงผลเดิมเพื่อให้ flex ทำงานได้เสร็จสรรพ */
-        .modal[style*="display: block"], 
-        .modal[style*="display: flex"] {
-            display: flex !important;
-        }
-
-        /* 2. ตัวกล่องเนื้อหาล็อกอิน (Modal Content) */
+        /* 2. Modal Content */
         .modal-content {
             background-color: #ffffff;
+            color: #1e293b;
             width: 100%;
-            max-width: 400px; /* จำกัดขนาดความกว้างบน PC */
-            max-height: 90vh; /* จำกัดความสูงไม่ให้เกิน 90% ของหน้าจอ */
-            overflow-y: auto; /* ถ้ายาวล้นหรือคีย์บอร์ดบัง จะเกิดสกรอลล์ด้านในกล่องทันที */
-            border-radius: 16px; /* ขอบมนสวยงามเข้ากับไอแพด */
+            max-width: 420px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 20px;
             padding: 28px;
             box-sizing: border-box;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
             margin: auto;
             position: relative;
-            animation: modalFadeIn 0.25s ease-out; /* เพิ่มแอนิเมชันเปิดแบบนุ่มนวล */
+            animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(226, 232, 240, 0.8);
         }
 
-        /* โหมดมืด (Dark Mode) สำหรับธีมสีที่รองรับ */
-        body.dark-mode .modal-content {
+        /* โหมดมืดสำหรับ Modal */
+        body.dark-mode .modal-content,
+        body.dark-theme .modal-content {
             background-color: #1e293b;
             color: #f8fafc;
+            border-color: #334155;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
         @keyframes modalFadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+            from { opacity: 0; transform: scale(0.92) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        /* 3. ปรับสไตล์สำหรับอุปกรณ์ขนาดเล็ก และแท็บเล็ตแนวตั้งเมื่อพิมพ์ (คีย์บอร์ดเด้ง) */
+        /* 3. Admin Panel UI Design */
+        .admin-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .admin-card,
+        body.dark-theme .admin-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-color: #334155;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .admin-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        body.dark-mode .admin-header-bar,
+        body.dark-theme .admin-header-bar {
+            border-bottom-color: #334155;
+        }
+
+        .admin-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #dbeafe;
+            color: #1e40af;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        body.dark-mode .admin-badge,
+        body.dark-theme .admin-badge {
+            background: rgba(30, 64, 175, 0.3);
+            color: #93c5fd;
+            border: 1px solid rgba(147, 197, 253, 0.2);
+        }
+
+        /* ปุ่มการทำงานแอดมิน */
+        .btn-announce-save {
+            background: #3b82f6;
+            color: #ffffff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-family: 'Prompt', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .btn-announce-save:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-logout {
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-family: 'Prompt', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-logout:hover {
+            background-color: #dc2626;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        /* กล่องแสดงประกาศประจำสัปดาห์ */
+        .announcement-container {
+            background: #f1f5f9;
+            border-left: 4px solid #3b82f6;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin: 16px 0;
+            font-size: 1.05rem;
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .announcement-container,
+        body.dark-theme .announcement-container {
+            background: #0f172a;
+            border-left-color: #60a5fa;
+            color: #f1f5f9;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
         @media screen and (max-width: 768px), screen and (max-height: 600px) {
             .modal {
-                align-items: flex-start; /* ดันกล่องขึ้นไปด้านบนเล็กน้อยเพื่อไม่ให้คีย์บอร์ดทับซ้อน */
+                align-items: flex-start;
                 padding-top: 30px;
             }
             .modal-content {
-                max-height: 85vh; /* กระชับความสูงบนมือถือ */
+                max-height: 85vh;
                 padding: 20px;
-            }
-            .modal-content h3 {
-                margin-top: 5px;
-                font-size: 1.3rem;
-            }
-            .modal .input-group {
-                margin-bottom: 12px !important; /* ลดช่องว่างเพื่อประหยัดพื้นที่หน้าจอ */
             }
         }
     </style>
 </head>
 <body>
 
+    <!-- แถบบาร์ลัด (Hotbar) -->
     <nav class="hotbar">
         <div class="hotbar-container">
             <div style="display: flex; gap: 10px; align-items: center;">
@@ -115,9 +224,9 @@
         </div>
     </nav>
 
+    <!-- รูปแบนเนอร์ส่วนหัว -->
     <header class="banner-container">
         <div class="banner-box">
-            <!-- อัปเดตตำแหน่งภาพไปที่โฟลเดอร์ As -->
             <img src="As/banner.jpg" alt="SMTE20 Banner" onerror="this.style.display='none';">
             <div class="banner-placeholder-text">SMTE20 Classroom</div>
         </div>
@@ -125,8 +234,31 @@
 
     <main class="main-wrapper">
         
-        <section id="admin-panel" class="admin-panel hidden">
-            <h3><i class="fa-solid fa-unlock-keyhole"></i> ระบบจัดการสำหรับแอดมิน (Admin Panel)</h3>
+        <!-- แผงควบคุมแอดมิน (Admin Panel) -->
+        <section id="admin-panel" class="admin-panel admin-card hidden">
+            <div class="admin-header-bar">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span class="admin-badge"><i class="fa-solid fa-shield-halved"></i> Admin Mode</span>
+                    <h3 style="margin: 0; font-size: 1.2rem;"><i class="fa-solid fa-sliders"></i> ระบบจัดการสำหรับแอดมิน</h3>
+                </div>
+                <button id="logoutBtn" class="btn-logout" title="ออกจากระบบแอดมิน">
+                    <i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ
+                </button>
+            </div>
+
+            <!-- แก้ไขข้อความประกาศประจำสัปดาห์ -->
+            <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px dashed #cbd5e1;">
+                <h4 style="margin: 0 0 10px 0;"><i class="fa-solid fa-bullhorn" style="color: #3b82f6;"></i> แก้ไขประกาศประจำสัปดาห์</h4>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <input type="text" id="edit-announcement-input" placeholder="พิมพ์ข้อความประกาศใหม่ที่นี่..." style="flex: 1; min-width: 240px; padding: 10px 14px; border-radius: 10px; border: 1px solid #cbd5e1; font-family: 'Prompt';">
+                    <button id="saveAnnouncementBtn" class="btn-announce-save">
+                        <i class="fa-solid fa-floppy-disk"></i> บันทึกประกาศ
+                    </button>
+                </div>
+            </div>
+
+            <!-- ฟอร์มเพิ่มงานใหม่ -->
+            <h4 style="margin: 0 0 10px 0;"><i class="fa-solid fa-square-plus" style="color: #10b981;"></i> เพิ่มงานใหม่ลงตาราง</h4>
             <form id="task-form" class="task-form">
                 <input type="text" id="task-name" placeholder="ชื่องาน" required>
                 <input type="text" id="task-desc" placeholder="รายละเอียดงาน" required>
@@ -134,10 +266,9 @@
                 <input type="text" id="task-note" placeholder="หมายเหตุ (ถ้ามี)">
                 <button type="submit" class="btn-add"><i class="fa-solid fa-plus"></i> เพิ่มงานใหม่</button>
             </form>
-
-            <button id="logoutBtn" class="btn-logout" style="margin-top: 15px;">ออกจากระบบแอดมิน</button>
         </section>
 
+        <!-- ตารางงาน -->
         <section id="task-section" class="content-card">
             <div class="card-header">
                 <i class="fa-solid fa-chalkboard"></i>
@@ -166,6 +297,7 @@
             </div>
         </section>
 
+        <!-- โซนเก็บเงินและประกาศประจำสัปดาห์ -->
         <section id="money-section" class="content-card text-center">
             <div class="card-header justify-center">
                 <i class="fa-solid fa-bounce fa-money-bill-wave" style="color: #2ec4b6;"></i>
@@ -184,10 +316,11 @@
 
     </main>
 
+    <!-- Modal ล็อกอิน -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
-            <h3>แอดมินเข้าสู่ระบบ</h3>
+            <h3 style="margin-top:0;"><i class="fa-solid fa-user-shield" style="color: #3b82f6;"></i> แอดมินเข้าสู่ระบบ</h3>
             <div class="input-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" placeholder="ระบุผู้ใช้งาน">
@@ -196,15 +329,16 @@
                 <label for="password">Password</label>
                 <input type="password" id="password" placeholder="ระบุรหัสผ่าน">
             </div>
-            <p id="login-error" class="error-text hidden">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!</p>
+            <p id="login-error" class="error-text hidden" style="color: #ef4444; font-size: 0.9rem;">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!</p>
             <button id="submitLogin" class="btn-login-submit">เข้าสู่ระบบ</button>
         </div>
     </div>
 
+    <!-- Modal แก้ไขงาน -->
     <div id="editModal" class="modal">
         <div class="modal-content">
             <span class="close-edit-modal">&times;</span>
-            <h3><i class="fa-solid fa-pen-to-square" style="color: #ffb703;"></i> แก้ไขข้อมูลงาน</h3>
+            <h3 style="margin-top:0;"><i class="fa-solid fa-pen-to-square" style="color: #ffb703;"></i> แก้ไขข้อมูลงาน</h3>
             <form id="edit-task-form" style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
                 <input type="hidden" id="edit-task-id">
                 <div class="input-group" style="margin: 0;">
