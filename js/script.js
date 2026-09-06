@@ -204,7 +204,10 @@ if (taskForm) {
         .then(() => {
             alert('➕ เพิ่มงานใหม่ลง Google Sheets สำเร็จ!');
             taskForm.reset();
-            fetchTasksFromSheets(); 
+            // หน่วงเวลา 1.5 วินาที เพื่อรอให้ Google Sheets บันทึกข้อมูลเสร็จเรียบร้อย
+            setTimeout(() => {
+                fetchTasksFromSheets(); 
+            }, 1500);
         })
         .catch(err => {
             console.error("Error adding task:", err);
@@ -239,7 +242,9 @@ window.deleteTask = function(idToDelete) {
         })
         .then(() => {
             alert('🗑️ ลบงานออกจากระบบสำเร็จ!');
-            fetchTasksFromSheets(); 
+            setTimeout(() => {
+                fetchTasksFromSheets(); 
+            }, 1500);
         })
         .catch(err => {
             console.error("Error deleting task:", err);
@@ -252,9 +257,8 @@ window.deleteTask = function(idToDelete) {
 updateUI();
 
 // ==========================================
-// 📢 ระบบแสดงผลและจัดการบันทึกประกาศ (แก้ไข ID ให้ตรงกับ HTML)
+// 📢 ระบบแสดงผลและจัดการบันทึกประกาศ
 // ==========================================
-// เปลี่ยนจาก announcement-text เป็น announcement-box ตาม ID ใน HTML ของคุณ
 const announcementBox = document.getElementById('announcement-box'); 
 const saveAnnouncementBtn = document.getElementById('saveAnnouncementBtn');
 
@@ -364,7 +368,9 @@ if (editTaskForm) {
         .then(() => {
             alert('📝 แก้ไขข้อมูลงานใน Google Sheets สำเร็จ!');
             if (editModal) editModal.classList.remove('show');
-            fetchTasksFromSheets(); 
+            setTimeout(() => {
+                fetchTasksFromSheets(); 
+            }, 1500);
         })
         .catch(err => {
             console.error("Error editing task:", err);
